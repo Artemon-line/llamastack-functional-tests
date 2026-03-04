@@ -1,0 +1,25 @@
+[project]
+name = "llamastack-functional-tests"
+version = "0.1.0"
+description = "Functional tests for LlamaStack (Bruno + notebooks)"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "llama-stack-client>=0.5.0",
+    "openai>=2.24.0",
+    "mcp>=1.0.0",
+    "pytest>=9.0.2",
+    "nbformat>=5.10.4",
+    "nbconvert>=7.17.0",
+    "pytest-xdist>=3.8.0",
+]
+
+[tool.pytest.ini_options]
+addopts = "--cov=llamastack_functional_tests --cov-report=term-missing"
+
+[tool.coverage.run]
+branch = true
+source = ["llamastack_functional_tests"]
+
+[tool.coverage.report]
+show_missing = true
