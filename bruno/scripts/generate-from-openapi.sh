@@ -1,3 +1,4 @@
+
 #!/usr/bin/env bash
 # Fetch OpenAPI spec from running LLS (e.g. 0.2.22.2+rhai0) and generate Bruno collection.
 # Usage: BASE_URL=http://localhost:8321 ./bruno/scripts/generate-from-openapi.sh
