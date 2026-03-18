@@ -1,0 +1,15 @@
+meta {
+  name: Get Trace
+  type: http
+  seq: 97
+}
+
+get {
+  url: {{baseUrl}}/v1/telemetry/traces/:trace_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  trace_id: 
+}

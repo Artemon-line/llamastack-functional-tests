@@ -1,0 +1,26 @@
+meta {
+  name: Save Spans To Dataset
+  type: http
+  seq: 102
+}
+
+post {
+  url: {{baseUrl}}/v1/telemetry/spans/export
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "attribute_filters": [
+      {
+        "key": "",
+        "op": "eq",
+        "value": ""
+      }
+    ],
+    "attributes_to_save": [],
+    "dataset_id": "",
+    "max_depth": ""
+  }
+}

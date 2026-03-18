@@ -1,0 +1,19 @@
+meta {
+  name: Get Prompt
+  type: http
+  seq: 36
+}
+
+get {
+  url: {{baseUrl}}/v1/prompts/:prompt_id
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~version: 
+}
+
+params:path {
+  prompt_id: 
+}

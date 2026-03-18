@@ -1,0 +1,23 @@
+meta {
+  name: Append Rows
+  type: http
+  seq: 93
+}
+
+post {
+  url: {{baseUrl}}/v1/datasetio/append-rows/:dataset_id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  dataset_id: 
+}
+
+body:json {
+  {
+    "rows": [
+      {}
+    ]
+  }
+}

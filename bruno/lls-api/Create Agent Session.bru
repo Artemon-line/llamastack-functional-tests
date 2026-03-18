@@ -1,0 +1,21 @@
+meta {
+  name: Create Agent Session
+  type: http
+  seq: 66
+}
+
+post {
+  url: {{baseUrl}}/v1/agents/:agent_id/session
+  body: json
+  auth: inherit
+}
+
+params:path {
+  agent_id: 
+}
+
+body:json {
+  {
+    "session_name": ""
+  }
+}

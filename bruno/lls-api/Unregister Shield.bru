@@ -1,0 +1,15 @@
+meta {
+  name: Unregister Shield
+  type: http
+  seq: 61
+}
+
+delete {
+  url: {{baseUrl}}/v1/shields/:identifier
+  body: none
+  auth: inherit
+}
+
+params:path {
+  identifier: 
+}

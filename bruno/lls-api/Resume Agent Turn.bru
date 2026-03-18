@@ -1,0 +1,31 @@
+meta {
+  name: Resume Agent Turn
+  type: http
+  seq: 80
+}
+
+post {
+  url: {{baseUrl}}/v1/agents/:agent_id/session/:session_id/turn/:turn_id/resume
+  body: json
+  auth: inherit
+}
+
+params:path {
+  agent_id: 
+  session_id: 
+  turn_id: 
+}
+
+body:json {
+  {
+    "tool_responses": [
+      {
+        "call_id": "",
+        "tool_name": "",
+        "content": "",
+        "metadata": ""
+      }
+    ],
+    "stream": ""
+  }
+}

@@ -1,0 +1,24 @@
+meta {
+  name: Openai Create Vector Store
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/v1/openai/v1/vector_stores
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name": "",
+    "file_ids": "",
+    "expires_after": "",
+    "chunking_strategy": "",
+    "metadata": "",
+    "embedding_model": "",
+    "embedding_dimension": "",
+    "provider_id": ""
+  }
+}

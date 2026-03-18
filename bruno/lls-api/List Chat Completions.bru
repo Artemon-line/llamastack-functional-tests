@@ -1,0 +1,18 @@
+meta {
+  name: List Chat Completions
+  type: http
+  seq: 109
+}
+
+get {
+  url: {{baseUrl}}/v1/openai/v1/chat/completions
+  body: none
+  auth: inherit
+}
+
+params:query {
+  limit: 20
+  order: desc
+  ~after: 
+  ~model: 
+}

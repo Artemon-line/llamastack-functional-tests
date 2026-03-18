@@ -1,0 +1,18 @@
+meta {
+  name: Log Event
+  type: http
+  seq: 98
+}
+
+post {
+  url: {{baseUrl}}/v1/telemetry/events
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "event": "",
+    "ttl_seconds": 0
+  }
+}

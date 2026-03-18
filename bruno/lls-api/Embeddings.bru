@@ -1,0 +1,21 @@
+meta {
+  name: Embeddings
+  type: http
+  seq: 107
+}
+
+post {
+  url: {{baseUrl}}/v1/inference/embeddings
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "model_id": "",
+    "contents": "",
+    "text_truncation": "",
+    "output_dimension": "",
+    "task_type": ""
+  }
+}

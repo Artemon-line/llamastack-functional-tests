@@ -1,0 +1,15 @@
+meta {
+  name: Get Agent
+  type: http
+  seq: 71
+}
+
+get {
+  url: {{baseUrl}}/v1/agents/:agent_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  agent_id: 
+}

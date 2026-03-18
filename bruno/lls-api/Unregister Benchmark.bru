@@ -1,0 +1,15 @@
+meta {
+  name: Unregister Benchmark
+  type: http
+  seq: 55
+}
+
+delete {
+  url: {{baseUrl}}/v1/eval/benchmarks/:benchmark_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  benchmark_id: 
+}

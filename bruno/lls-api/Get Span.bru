@@ -1,0 +1,16 @@
+meta {
+  name: Get Span
+  type: http
+  seq: 95
+}
+
+get {
+  url: {{baseUrl}}/v1/telemetry/traces/:trace_id/spans/:span_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  trace_id: 
+  span_id: 
+}

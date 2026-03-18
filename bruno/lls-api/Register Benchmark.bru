@@ -1,0 +1,22 @@
+meta {
+  name: Register Benchmark
+  type: http
+  seq: 57
+}
+
+post {
+  url: {{baseUrl}}/v1/eval/benchmarks
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "benchmark_id": "",
+    "dataset_id": "",
+    "scoring_functions": [],
+    "metadata": "",
+    "provider_benchmark_id": "",
+    "provider_id": ""
+  }
+}

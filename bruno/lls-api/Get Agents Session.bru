@@ -1,0 +1,20 @@
+meta {
+  name: Get Agents Session
+  type: http
+  seq: 73
+}
+
+get {
+  url: {{baseUrl}}/v1/agents/:agent_id/session/:session_id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  agent_id: 
+  session_id: 
+}
+
+body:json {
+  {}
+}

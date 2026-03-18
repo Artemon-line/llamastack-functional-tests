@@ -1,0 +1,19 @@
+meta {
+  name: Query
+  type: http
+  seq: 23
+}
+
+post {
+  url: {{baseUrl}}/v1/tool-runtime/rag-tool/query
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "content": "",
+    "vector_db_ids": [],
+    "query_config": ""
+  }
+}

@@ -1,0 +1,18 @@
+meta {
+  name: Openai List Files
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/openai/v1/files
+  body: none
+  auth: inherit
+}
+
+params:query {
+  limit: 10000
+  order: desc
+  ~after: 
+  ~purpose: 
+}

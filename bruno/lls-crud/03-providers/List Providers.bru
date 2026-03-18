@@ -1,0 +1,22 @@
+meta {
+  name: List Providers
+  type: http
+  seq: 1
+}
+
+http {
+  method: GET
+  url: {{base_url}}/v1/providers
+  body: none
+  auth: none
+}
+
+script: post-response {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.eql(200);
+  });
+  test("Response is array or object", function() {
+    const body = res.getBody();
+    expect(body).to.be.ok;
+  });
+}

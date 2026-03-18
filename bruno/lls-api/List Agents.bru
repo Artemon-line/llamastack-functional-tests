@@ -1,0 +1,16 @@
+meta {
+  name: List Agents
+  type: http
+  seq: 65
+}
+
+get {
+  url: {{baseUrl}}/v1/agents
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~start_index: 
+  ~limit: 
+}

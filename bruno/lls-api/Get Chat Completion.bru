@@ -1,0 +1,15 @@
+meta {
+  name: Get Chat Completion
+  type: http
+  seq: 108
+}
+
+get {
+  url: {{baseUrl}}/v1/openai/v1/chat/completions/:completion_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  completion_id: 
+}

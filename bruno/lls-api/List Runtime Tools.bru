@@ -1,0 +1,19 @@
+meta {
+  name: List Runtime Tools
+  type: http
+  seq: 21
+}
+
+get {
+  url: {{baseUrl}}/v1/tool-runtime/list-tools
+  body: json
+  auth: inherit
+}
+
+params:query {
+  ~tool_group_id: 
+}
+
+body:json {
+  {}
+}

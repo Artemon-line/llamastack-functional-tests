@@ -1,0 +1,29 @@
+meta {
+  name: Create Vector Store
+  type: http
+  seq: 1
+}
+
+http {
+  method: POST
+  url: {{base_url}}/v1/vector_stores
+  body: json
+  auth: none
+}
+
+body:json {
+  "name": "bruno-crud-test"
+}
+
+script: post-response {
+  test("Status is 200 or 201", function() {
+    const status = res.getStatus();
+    expect([200, 201]).to.include(status);
+  });
+  test("Response has id and store for later CRUD", function() {
+    const body = res.getBody();
+    expect(body).to.be.an("object");
+    expect(body.id).to.be.a("string");
+    bru.setEnvVar("vector_store_id", body.id);
+  });
+}

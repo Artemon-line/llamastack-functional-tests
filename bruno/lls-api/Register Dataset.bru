@@ -1,0 +1,20 @@
+meta {
+  name: Register Dataset
+  type: http
+  seq: 27
+}
+
+post {
+  url: {{baseUrl}}/v1/datasets
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "purpose": "post-training/messages",
+    "source": "",
+    "metadata": "",
+    "dataset_id": ""
+  }
+}

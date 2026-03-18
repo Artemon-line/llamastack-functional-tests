@@ -1,0 +1,25 @@
+meta {
+  name: Query Metrics
+  type: http
+  seq: 99
+}
+
+post {
+  url: {{baseUrl}}/v1/telemetry/metrics/:metric_name
+  body: json
+  auth: inherit
+}
+
+params:path {
+  metric_name: 
+}
+
+body:json {
+  {
+    "start_time": 0,
+    "end_time": "",
+    "granularity": "",
+    "query_type": "range",
+    "label_matchers": ""
+  }
+}

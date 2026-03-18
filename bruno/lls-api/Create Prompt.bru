@@ -1,0 +1,18 @@
+meta {
+  name: Create Prompt
+  type: http
+  seq: 34
+}
+
+post {
+  url: {{baseUrl}}/v1/prompts
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "prompt": "",
+    "variables": ""
+  }
+}

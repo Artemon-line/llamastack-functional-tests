@@ -1,0 +1,29 @@
+meta {
+  name: Evaluate Rows
+  type: http
+  seq: 88
+}
+
+post {
+  url: {{baseUrl}}/v1/eval/benchmarks/:benchmark_id/evaluations
+  body: json
+  auth: inherit
+}
+
+params:path {
+  benchmark_id: 
+}
+
+body:json {
+  {
+    "input_rows": [
+      {}
+    ],
+    "scoring_functions": [],
+    "benchmark_config": {
+      "eval_candidate": "",
+      "scoring_params": {},
+      "num_examples": ""
+    }
+  }
+}

@@ -1,0 +1,18 @@
+meta {
+  name: Openai List Vector Stores
+  type: http
+  seq: 10
+}
+
+get {
+  url: {{baseUrl}}/v1/openai/v1/vector_stores
+  body: none
+  auth: inherit
+}
+
+params:query {
+  limit: 20
+  order: desc
+  ~after: 
+  ~before: 
+}

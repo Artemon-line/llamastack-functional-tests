@@ -1,0 +1,16 @@
+meta {
+  name: Openai Delete Vector Store File
+  type: http
+  seq: 14
+}
+
+delete {
+  url: {{baseUrl}}/v1/openai/v1/vector_stores/:vector_store_id/files/:file_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  vector_store_id: 
+  file_id: 
+}

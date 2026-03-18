@@ -1,0 +1,16 @@
+meta {
+  name: Delete Agents Session
+  type: http
+  seq: 72
+}
+
+delete {
+  url: {{baseUrl}}/v1/agents/:agent_id/session/:session_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  agent_id: 
+  session_id: 
+}

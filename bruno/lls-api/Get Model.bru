@@ -1,0 +1,15 @@
+meta {
+  name: Get Model
+  type: http
+  seq: 81
+}
+
+get {
+  url: {{baseUrl}}/v1/models/:model_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  model_id: 
+}

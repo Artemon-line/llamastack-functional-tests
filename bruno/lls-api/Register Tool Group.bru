@@ -1,0 +1,20 @@
+meta {
+  name: Register Tool Group
+  type: http
+  seq: 44
+}
+
+post {
+  url: {{baseUrl}}/v1/toolgroups
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "toolgroup_id": "",
+    "provider_id": "",
+    "mcp_endpoint": "",
+    "args": ""
+  }
+}

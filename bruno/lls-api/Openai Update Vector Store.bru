@@ -1,0 +1,23 @@
+meta {
+  name: Openai Update Vector Store
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{baseUrl}}/v1/openai/v1/vector_stores/:vector_store_id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  vector_store_id: 
+}
+
+body:json {
+  {
+    "name": "",
+    "expires_after": "",
+    "metadata": ""
+  }
+}

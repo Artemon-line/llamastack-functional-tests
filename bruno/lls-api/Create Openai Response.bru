@@ -1,0 +1,27 @@
+meta {
+  name: Create Openai Response
+  type: http
+  seq: 68
+}
+
+post {
+  url: {{baseUrl}}/v1/openai/v1/responses
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "input": "",
+    "model": "",
+    "instructions": "",
+    "previous_response_id": "",
+    "store": "",
+    "stream": "",
+    "temperature": "",
+    "text": "",
+    "tools": "",
+    "include": "",
+    "max_infer_iters": ""
+  }
+}

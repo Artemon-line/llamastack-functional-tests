@@ -1,0 +1,15 @@
+meta {
+  name: Inspect Provider
+  type: http
+  seq: 86
+}
+
+get {
+  url: {{baseUrl}}/v1/providers/:provider_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  provider_id: 
+}

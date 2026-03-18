@@ -1,0 +1,22 @@
+meta {
+  name: Register Scoring Function
+  type: http
+  seq: 53
+}
+
+post {
+  url: {{baseUrl}}/v1/scoring-functions
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "scoring_fn_id": "",
+    "description": "",
+    "return_type": "",
+    "provider_scoring_fn_id": "",
+    "provider_id": "",
+    "params": ""
+  }
+}

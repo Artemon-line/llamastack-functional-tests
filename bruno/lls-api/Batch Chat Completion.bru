@@ -1,0 +1,25 @@
+meta {
+  name: Batch Chat Completion
+  type: http
+  seq: 103
+}
+
+post {
+  url: {{baseUrl}}/v1/inference/batch-chat-completion
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "model_id": "",
+    "messages_batch": [
+      []
+    ],
+    "tools": "",
+    "tool_config": "",
+    "sampling_params": "",
+    "response_format": "",
+    "logprobs": ""
+  }
+}

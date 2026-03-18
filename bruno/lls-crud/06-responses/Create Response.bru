@@ -1,0 +1,34 @@
+meta {
+  name: Create Response
+  type: http
+  seq: 1
+}
+
+http {
+  method: POST
+  url: {{base_url}}/v1/responses
+  body: json
+  auth: none
+}
+
+body:json {
+  "model": "{{model}}",
+  "input": [
+    {
+      "role": "user",
+      "content": "Say hello in one word."
+    }
+  ]
+}
+
+script: post-response {
+  test("Status is 200 or 201", function() {
+    const status = res.getStatus();
+    expect([200, 201]).to.include(status);
+  });
+  test("Response has output or choices", function() {
+    const body = res.getBody();
+    expect(body).to.be.an("object");
+    expect(body.output || body.choices || body.id).to.be.ok;
+  });
+}

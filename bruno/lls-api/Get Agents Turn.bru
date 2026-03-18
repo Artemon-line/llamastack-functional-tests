@@ -1,0 +1,17 @@
+meta {
+  name: Get Agents Turn
+  type: http
+  seq: 77
+}
+
+get {
+  url: {{baseUrl}}/v1/agents/:agent_id/session/:session_id/turn/:turn_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  agent_id: 
+  session_id: 
+  turn_id: 
+}

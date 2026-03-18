@@ -1,0 +1,15 @@
+meta {
+  name: Unregister Vector Db
+  type: http
+  seq: 47
+}
+
+delete {
+  url: {{baseUrl}}/v1/vector-dbs/:vector_db_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  vector_db_id: 
+}

@@ -1,0 +1,26 @@
+meta {
+  name: Create Agent Turn
+  type: http
+  seq: 67
+}
+
+post {
+  url: {{baseUrl}}/v1/agents/:agent_id/session/:session_id/turn
+  body: json
+  auth: inherit
+}
+
+params:path {
+  agent_id: 
+  session_id: 
+}
+
+body:json {
+  {
+    "messages": [],
+    "toolgroups": "",
+    "documents": "",
+    "stream": "",
+    "tool_config": ""
+  }
+}

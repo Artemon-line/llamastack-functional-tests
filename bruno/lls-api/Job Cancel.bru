@@ -1,0 +1,16 @@
+meta {
+  name: Job Cancel
+  type: http
+  seq: 89
+}
+
+delete {
+  url: {{baseUrl}}/v1/eval/benchmarks/:benchmark_id/jobs/:job_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  benchmark_id: 
+  job_id: 
+}

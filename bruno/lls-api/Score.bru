@@ -1,0 +1,20 @@
+meta {
+  name: Score
+  type: http
+  seq: 31
+}
+
+post {
+  url: {{baseUrl}}/v1/scoring/score
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "input_rows": [
+      {}
+    ],
+    "scoring_functions": {}
+  }
+}

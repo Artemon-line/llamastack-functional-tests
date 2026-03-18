@@ -1,0 +1,36 @@
+meta {
+  name: Openai Completion
+  type: http
+  seq: 111
+}
+
+post {
+  url: {{baseUrl}}/v1/openai/v1/completions
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "model": "",
+    "prompt": "",
+    "best_of": "",
+    "echo": "",
+    "frequency_penalty": "",
+    "logit_bias": "",
+    "logprobs": "",
+    "max_tokens": "",
+    "n": "",
+    "presence_penalty": "",
+    "seed": "",
+    "stop": "",
+    "stream": "",
+    "stream_options": "",
+    "temperature": "",
+    "top_p": "",
+    "user": "",
+    "guided_choice": "",
+    "prompt_logprobs": "",
+    "suffix": ""
+  }
+}

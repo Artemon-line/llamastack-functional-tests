@@ -1,0 +1,27 @@
+meta {
+  name: Insert Chunks
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/v1/vector-io/insert
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "vector_db_id": "",
+    "chunks": [
+      {
+        "content": "",
+        "metadata": {},
+        "embedding": "",
+        "chunk_id": "",
+        "chunk_metadata": ""
+      }
+    ],
+    "ttl_seconds": ""
+  }
+}

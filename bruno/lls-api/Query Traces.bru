@@ -1,0 +1,20 @@
+meta {
+  name: Query Traces
+  type: http
+  seq: 101
+}
+
+post {
+  url: {{baseUrl}}/v1/telemetry/traces
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "attribute_filters": "",
+    "limit": "",
+    "offset": "",
+    "order_by": ""
+  }
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Get Vector Db
+  type: http
+  seq: 46
+}
+
+get {
+  url: {{baseUrl}}/v1/vector-dbs/:vector_db_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  vector_db_id: 
+}

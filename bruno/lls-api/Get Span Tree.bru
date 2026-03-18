@@ -1,0 +1,22 @@
+meta {
+  name: Get Span Tree
+  type: http
+  seq: 96
+}
+
+post {
+  url: {{baseUrl}}/v1/telemetry/spans/:span_id/tree
+  body: json
+  auth: inherit
+}
+
+params:path {
+  span_id: 
+}
+
+body:json {
+  {
+    "attributes_to_return": "",
+    "max_depth": ""
+  }
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Run Eval
+  type: http
+  seq: 92
+}
+
+post {
+  url: {{baseUrl}}/v1/eval/benchmarks/:benchmark_id/jobs
+  body: json
+  auth: inherit
+}
+
+params:path {
+  benchmark_id: 
+}
+
+body:json {
+  {
+    "benchmark_config": {
+      "eval_candidate": "",
+      "scoring_params": {},
+      "num_examples": ""
+    }
+  }
+}

@@ -1,0 +1,18 @@
+meta {
+  name: Openai Upload File
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/v1/openai/v1/files
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  file: @file()
+  purpose: 
+  expires_after_anchor: 
+  expires_after_seconds: 
+}

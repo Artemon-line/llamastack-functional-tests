@@ -1,0 +1,15 @@
+meta {
+  name: Get Openai Response
+  type: http
+  seq: 75
+}
+
+get {
+  url: {{baseUrl}}/v1/openai/v1/responses/:response_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  response_id: 
+}

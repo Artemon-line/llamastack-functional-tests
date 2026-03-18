@@ -1,0 +1,20 @@
+meta {
+  name: Iterrows
+  type: http
+  seq: 94
+}
+
+get {
+  url: {{baseUrl}}/v1/datasetio/iterrows/:dataset_id
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~start_index: 
+  ~limit: 
+}
+
+params:path {
+  dataset_id: 
+}

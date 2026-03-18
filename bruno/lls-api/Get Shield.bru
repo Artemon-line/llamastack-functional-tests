@@ -1,0 +1,15 @@
+meta {
+  name: Get Shield
+  type: http
+  seq: 60
+}
+
+get {
+  url: {{baseUrl}}/v1/shields/:identifier
+  body: none
+  auth: inherit
+}
+
+params:path {
+  identifier: 
+}

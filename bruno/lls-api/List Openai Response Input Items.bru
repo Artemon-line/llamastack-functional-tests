@@ -1,0 +1,26 @@
+meta {
+  name: List Openai Response Input Items
+  type: http
+  seq: 79
+}
+
+get {
+  url: {{baseUrl}}/v1/openai/v1/responses/:response_id/input_items
+  body: json
+  auth: inherit
+}
+
+params:query {
+  limit: 20
+  order: desc
+  ~after: 
+  ~before: 
+}
+
+params:path {
+  response_id: 
+}
+
+body:json {
+  {}
+}

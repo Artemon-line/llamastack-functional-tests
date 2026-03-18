@@ -1,0 +1,15 @@
+meta {
+  name: Openai Retrieve Vector Store
+  type: http
+  seq: 12
+}
+
+get {
+  url: {{baseUrl}}/v1/openai/v1/vector_stores/:vector_store_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  vector_store_id: 
+}

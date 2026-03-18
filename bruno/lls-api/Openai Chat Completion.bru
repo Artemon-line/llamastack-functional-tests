@@ -1,0 +1,39 @@
+meta {
+  name: Openai Chat Completion
+  type: http
+  seq: 110
+}
+
+post {
+  url: {{baseUrl}}/v1/openai/v1/chat/completions
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "model": "",
+    "messages": [],
+    "frequency_penalty": "",
+    "function_call": "",
+    "functions": "",
+    "logit_bias": "",
+    "logprobs": "",
+    "max_completion_tokens": "",
+    "max_tokens": "",
+    "n": "",
+    "parallel_tool_calls": "",
+    "presence_penalty": "",
+    "response_format": "",
+    "seed": "",
+    "stop": "",
+    "stream": "",
+    "stream_options": "",
+    "temperature": "",
+    "tool_choice": "",
+    "tools": "",
+    "top_logprobs": "",
+    "top_p": "",
+    "user": ""
+  }
+}

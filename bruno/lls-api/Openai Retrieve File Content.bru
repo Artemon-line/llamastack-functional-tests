@@ -1,0 +1,15 @@
+meta {
+  name: Openai Retrieve File Content
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/v1/openai/v1/files/:file_id/content
+  body: none
+  auth: inherit
+}
+
+params:path {
+  file_id: 
+}

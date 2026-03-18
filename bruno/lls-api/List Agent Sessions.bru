@@ -1,0 +1,20 @@
+meta {
+  name: List Agent Sessions
+  type: http
+  seq: 78
+}
+
+get {
+  url: {{baseUrl}}/v1/agents/:agent_id/sessions
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~start_index: 
+  ~limit: 
+}
+
+params:path {
+  agent_id: 
+}

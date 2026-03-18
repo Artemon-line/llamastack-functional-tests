@@ -1,0 +1,21 @@
+meta {
+  name: Openai Embeddings
+  type: http
+  seq: 112
+}
+
+post {
+  url: {{baseUrl}}/v1/openai/v1/embeddings
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "model": "",
+    "input": "",
+    "encoding_format": "",
+    "dimensions": "",
+    "user": ""
+  }
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Unregister Dataset
+  type: http
+  seq: 25
+}
+
+delete {
+  url: {{baseUrl}}/v1/datasets/:dataset_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  dataset_id: 
+}

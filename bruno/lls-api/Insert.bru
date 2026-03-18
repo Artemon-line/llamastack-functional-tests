@@ -1,0 +1,26 @@
+meta {
+  name: Insert
+  type: http
+  seq: 22
+}
+
+post {
+  url: {{baseUrl}}/v1/tool-runtime/rag-tool/insert
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "documents": [
+      {
+        "document_id": "",
+        "content": "",
+        "mime_type": "",
+        "metadata": {}
+      }
+    ],
+    "vector_db_id": "",
+    "chunk_size_in_tokens": 0
+  }
+}

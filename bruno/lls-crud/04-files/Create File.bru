@@ -1,0 +1,30 @@
+meta {
+  name: Create File
+  type: http
+  seq: 1
+}
+
+http {
+  method: POST
+  url: {{base_url}}/v1/files
+  body: form
+  auth: none
+}
+
+body:form {
+  file: (binary)
+  purpose: assistants
+}
+
+script: post-response {
+  test("Status is 200 or 201", function() {
+    const status = res.getStatus();
+    expect([200, 201]).to.include(status);
+  });
+  test("Response has id and store in env for later CRUD", function() {
+    const body = res.getBody();
+    expect(body).to.be.an("object");
+    expect(body.id).to.be.a("string");
+    bru.setEnvVar("file_id", body.id);
+  });
+}

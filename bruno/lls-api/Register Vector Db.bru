@@ -1,0 +1,22 @@
+meta {
+  name: Register Vector Db
+  type: http
+  seq: 49
+}
+
+post {
+  url: {{baseUrl}}/v1/vector-dbs
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "vector_db_id": "",
+    "embedding_model": "",
+    "embedding_dimension": "",
+    "provider_id": "",
+    "provider_vector_db_id": "",
+    "vector_db_name": ""
+  }
+}

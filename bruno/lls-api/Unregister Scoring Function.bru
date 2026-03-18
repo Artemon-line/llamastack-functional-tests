@@ -1,0 +1,15 @@
+meta {
+  name: Unregister Scoring Function
+  type: http
+  seq: 51
+}
+
+delete {
+  url: {{baseUrl}}/v1/scoring-functions/:scoring_fn_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  scoring_fn_id: 
+}

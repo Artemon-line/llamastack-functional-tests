@@ -1,0 +1,20 @@
+meta {
+  name: Rerank
+  type: http
+  seq: 113
+}
+
+post {
+  url: {{baseUrl}}/v1/inference/rerank
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "model": "",
+    "query": "",
+    "items": [],
+    "max_num_results": ""
+  }
+}

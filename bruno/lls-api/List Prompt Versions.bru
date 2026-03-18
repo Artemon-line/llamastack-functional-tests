@@ -1,0 +1,15 @@
+meta {
+  name: List Prompt Versions
+  type: http
+  seq: 38
+}
+
+get {
+  url: {{baseUrl}}/v1/prompts/:prompt_id/versions
+  body: none
+  auth: inherit
+}
+
+params:path {
+  prompt_id: 
+}

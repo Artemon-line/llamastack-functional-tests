@@ -1,0 +1,21 @@
+meta {
+  name: Batch Completion
+  type: http
+  seq: 104
+}
+
+post {
+  url: {{baseUrl}}/v1/inference/batch-completion
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "model_id": "",
+    "content_batch": [],
+    "sampling_params": "",
+    "response_format": "",
+    "logprobs": ""
+  }
+}

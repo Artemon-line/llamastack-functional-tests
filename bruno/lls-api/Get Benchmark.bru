@@ -1,0 +1,15 @@
+meta {
+  name: Get Benchmark
+  type: http
+  seq: 54
+}
+
+get {
+  url: {{baseUrl}}/v1/eval/benchmarks/:benchmark_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  benchmark_id: 
+}

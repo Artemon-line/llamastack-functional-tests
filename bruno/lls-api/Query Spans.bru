@@ -1,0 +1,25 @@
+meta {
+  name: Query Spans
+  type: http
+  seq: 100
+}
+
+post {
+  url: {{baseUrl}}/v1/telemetry/spans
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "attribute_filters": [
+      {
+        "key": "",
+        "op": "eq",
+        "value": ""
+      }
+    ],
+    "attributes_to_return": [],
+    "max_depth": ""
+  }
+}

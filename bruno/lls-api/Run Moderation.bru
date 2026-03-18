@@ -1,0 +1,18 @@
+meta {
+  name: Run Moderation
+  type: http
+  seq: 58
+}
+
+post {
+  url: {{baseUrl}}/v1/openai/v1/moderations
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "input": "",
+    "model": ""
+  }
+}

@@ -1,0 +1,16 @@
+meta {
+  name: Job Result
+  type: http
+  seq: 91
+}
+
+get {
+  url: {{baseUrl}}/v1/eval/benchmarks/:benchmark_id/jobs/:job_id/result
+  body: none
+  auth: inherit
+}
+
+params:path {
+  benchmark_id: 
+  job_id: 
+}
