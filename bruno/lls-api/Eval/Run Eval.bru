@@ -1,0 +1,38 @@
+meta {
+  name: Run Eval
+  type: http
+  seq: 1
+  tags: [
+    Eval
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1alpha/eval/benchmarks/:benchmark_id/jobs
+  body: json
+  auth: inherit
+}
+
+params:path {
+  benchmark_id: 
+}
+
+body:json {
+  {
+    "benchmark_config": {
+      "eval_candidate": {
+        "type": "",
+        "model": "",
+        "sampling_params": {
+          "strategy": "",
+          "max_tokens": "",
+          "repetition_penalty": "",
+          "stop": ""
+        },
+        "system_message": ""
+      },
+      "scoring_params": {},
+      "num_examples": ""
+    }
+  }
+}

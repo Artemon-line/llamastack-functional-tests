@@ -1,0 +1,23 @@
+meta {
+  name: Register a new dataset.
+  type: http
+  seq: 2
+  tags: [
+    Datasets
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1beta/datasets
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "purpose": "post-training/messages",
+    "source": "",
+    "metadata": "",
+    "dataset_id": ""
+  }
+}

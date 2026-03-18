@@ -1,0 +1,18 @@
+meta {
+  name: List routes.
+  type: http
+  seq: 1
+  tags: [
+    Inspect
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/inspect/routes
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~api_filter: 
+}

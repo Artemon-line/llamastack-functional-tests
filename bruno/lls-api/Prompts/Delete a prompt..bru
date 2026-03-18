@@ -1,0 +1,18 @@
+meta {
+  name: Delete a prompt.
+  type: http
+  seq: 6
+  tags: [
+    Prompts
+  ]
+}
+
+delete {
+  url: {{baseUrl}}/v1/prompts/:prompt_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  prompt_id: 
+}

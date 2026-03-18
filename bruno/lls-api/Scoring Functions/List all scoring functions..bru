@@ -1,0 +1,14 @@
+meta {
+  name: List all scoring functions.
+  type: http
+  seq: 1
+  tags: [
+    Scoring_Functions
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/scoring-functions
+  body: none
+  auth: inherit
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Register a model.
+  type: http
+  seq: 2
+  tags: [
+    Models
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/models
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "model_id": "",
+    "provider_model_id": "",
+    "provider_id": "",
+    "metadata": "",
+    "model_type": "",
+    "model_validation": ""
+  }
+}

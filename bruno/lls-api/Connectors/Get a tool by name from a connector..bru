@@ -1,0 +1,23 @@
+meta {
+  name: Get a tool by name from a connector.
+  type: http
+  seq: 2
+  tags: [
+    Connectors
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1alpha/connectors/:connector_id/tools/:tool_name
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~authorization: 
+}
+
+params:path {
+  connector_id: 
+  tool_name: 
+}

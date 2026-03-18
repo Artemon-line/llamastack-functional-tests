@@ -1,0 +1,19 @@
+meta {
+  name: Cancel a vector store file batch (OpenAI-compatible).
+  type: http
+  seq: 18
+  tags: [
+    VectorIO
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/vector_stores/:vector_store_id/file_batches/:batch_id/cancel
+  body: none
+  auth: inherit
+}
+
+params:path {
+  vector_store_id: 
+  batch_id: 
+}

@@ -1,0 +1,25 @@
+meta {
+  name: List items.
+  type: http
+  seq: 6
+  tags: [
+    Conversations
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/conversations/:conversation_id/items
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~after: 
+  ~include: 
+  ~limit: 
+  ~order: 
+}
+
+params:path {
+  conversation_id: 
+}

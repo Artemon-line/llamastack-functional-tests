@@ -1,0 +1,42 @@
+meta {
+  name: Evaluate Rows
+  type: http
+  seq: 2
+  tags: [
+    Eval
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1alpha/eval/benchmarks/:benchmark_id/evaluations
+  body: json
+  auth: inherit
+}
+
+params:path {
+  benchmark_id: 
+}
+
+body:json {
+  {
+    "input_rows": [
+      {}
+    ],
+    "scoring_functions": [],
+    "benchmark_config": {
+      "eval_candidate": {
+        "type": "",
+        "model": "",
+        "sampling_params": {
+          "strategy": "",
+          "max_tokens": "",
+          "repetition_penalty": "",
+          "stop": ""
+        },
+        "system_message": ""
+      },
+      "scoring_params": {},
+      "num_examples": ""
+    }
+  }
+}

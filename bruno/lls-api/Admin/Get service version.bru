@@ -1,0 +1,14 @@
+meta {
+  name: Get service version
+  type: http
+  seq: 5
+  tags: [
+    Admin
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1alpha/admin/version
+  body: none
+  auth: inherit
+}

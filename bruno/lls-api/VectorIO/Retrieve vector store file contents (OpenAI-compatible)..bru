@@ -1,0 +1,24 @@
+meta {
+  name: Retrieve vector store file contents (OpenAI-compatible).
+  type: http
+  seq: 14
+  tags: [
+    VectorIO
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/vector_stores/:vector_store_id/files/:file_id/content
+  body: none
+  auth: inherit
+}
+
+params:query {
+  include_embeddings: false
+  include_metadata: false
+}
+
+params:path {
+  vector_store_id: 
+  file_id: 
+}

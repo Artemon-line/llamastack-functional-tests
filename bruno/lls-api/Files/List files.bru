@@ -1,0 +1,21 @@
+meta {
+  name: List files
+  type: http
+  seq: 1
+  tags: [
+    Files
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/files
+  body: none
+  auth: inherit
+}
+
+params:query {
+  limit: 10000
+  order: desc
+  ~after: 
+  ~purpose: 
+}

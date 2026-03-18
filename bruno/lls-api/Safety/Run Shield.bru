@@ -1,0 +1,21 @@
+meta {
+  name: Run Shield
+  type: http
+  seq: 1
+  tags: [
+    Safety
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/safety/run-shield
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "shield_id": "",
+    "messages": []
+  }
+}

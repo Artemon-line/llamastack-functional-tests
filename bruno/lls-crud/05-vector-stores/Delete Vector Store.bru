@@ -1,0 +1,22 @@
+meta {
+  name: Delete Vector Store
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{baseUrl}}/v1/vector_stores/{{vector_store_id}}
+  body: none
+  auth: inherit
+}
+
+script:post-response {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.eql(200);
+  });
+  test("Response confirms deletion", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("deleted");
+    expect(body.deleted).to.eql(true);
+  });
+}

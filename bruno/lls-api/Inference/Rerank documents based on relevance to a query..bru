@@ -1,0 +1,23 @@
+meta {
+  name: Rerank documents based on relevance to a query.
+  type: http
+  seq: 6
+  tags: [
+    Inference
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1alpha/inference/rerank
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "model": "",
+    "query": "",
+    "items": [],
+    "max_num_results": ""
+  }
+}

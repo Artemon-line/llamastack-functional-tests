@@ -1,0 +1,27 @@
+meta {
+  name: Update a prompt.
+  type: http
+  seq: 5
+  tags: [
+    Prompts
+  ]
+}
+
+put {
+  url: {{baseUrl}}/v1/prompts/:prompt_id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  prompt_id: 
+}
+
+body:json {
+  {
+    "prompt": "",
+    "version": 0,
+    "variables": "",
+    "set_as_default": false
+  }
+}

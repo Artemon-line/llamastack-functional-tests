@@ -1,0 +1,21 @@
+meta {
+  name: Create a prompt.
+  type: http
+  seq: 2
+  tags: [
+    Prompts
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/prompts
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "prompt": "",
+    "variables": ""
+  }
+}

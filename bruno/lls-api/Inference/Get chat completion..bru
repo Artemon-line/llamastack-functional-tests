@@ -1,0 +1,18 @@
+meta {
+  name: Get chat completion.
+  type: http
+  seq: 3
+  tags: [
+    Inference
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/chat/completions/:completion_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  completion_id: 
+}

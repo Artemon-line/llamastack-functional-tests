@@ -1,0 +1,18 @@
+meta {
+  name: Retrieve a conversation.
+  type: http
+  seq: 2
+  tags: [
+    Conversations
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/conversations/:conversation_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  conversation_id: 
+}

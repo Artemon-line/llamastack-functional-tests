@@ -1,0 +1,37 @@
+meta {
+  name: Create completion.
+  type: http
+  seq: 4
+  tags: [
+    Inference
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/completions
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "model": "",
+    "prompt": "",
+    "best_of": "",
+    "echo": "",
+    "frequency_penalty": "",
+    "logit_bias": "",
+    "logprobs": "",
+    "max_tokens": "",
+    "n": "",
+    "presence_penalty": "",
+    "seed": "",
+    "stop": "",
+    "stream": "",
+    "stream_options": "",
+    "temperature": "",
+    "top_p": "",
+    "user": "",
+    "suffix": ""
+  }
+}

@@ -1,0 +1,27 @@
+meta {
+  name: List files in a vector store file batch (OpenAI-compatible).
+  type: http
+  seq: 17
+  tags: [
+    VectorIO
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/vector_stores/:vector_store_id/file_batches/:batch_id/files
+  body: none
+  auth: inherit
+}
+
+params:query {
+  limit: 20
+  order: desc
+  ~after: 
+  ~before: 
+  ~filter: 
+}
+
+params:path {
+  vector_store_id: 
+  batch_id: 
+}

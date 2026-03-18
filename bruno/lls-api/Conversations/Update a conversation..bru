@@ -1,0 +1,24 @@
+meta {
+  name: Update a conversation.
+  type: http
+  seq: 3
+  tags: [
+    Conversations
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/conversations/:conversation_id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  conversation_id: 
+}
+
+body:json {
+  {
+    "metadata": {}
+  }
+}

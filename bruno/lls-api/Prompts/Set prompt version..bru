@@ -1,0 +1,24 @@
+meta {
+  name: Set prompt version.
+  type: http
+  seq: 7
+  tags: [
+    Prompts
+  ]
+}
+
+put {
+  url: {{baseUrl}}/v1/prompts/:prompt_id/set-default-version
+  body: json
+  auth: inherit
+}
+
+params:path {
+  prompt_id: 
+}
+
+body:json {
+  {
+    "version": 0
+  }
+}

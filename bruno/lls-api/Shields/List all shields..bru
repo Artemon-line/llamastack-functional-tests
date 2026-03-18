@@ -1,0 +1,14 @@
+meta {
+  name: List all shields.
+  type: http
+  seq: 1
+  tags: [
+    Shields
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/shields
+  body: none
+  auth: inherit
+}

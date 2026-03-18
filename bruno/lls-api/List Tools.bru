@@ -1,0 +1,16 @@
+meta {
+  name: List Tools
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}/v1/tools
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~toolgroup_id: 
+  ~authorization: 
+}

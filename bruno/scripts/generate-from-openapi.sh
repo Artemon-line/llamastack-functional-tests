@@ -34,14 +34,21 @@ else
   fi
 fi
 
-# Bruno CLI import
-if ! command -v bru &>/dev/null; then
-  echo "Error: 'bru' (Bruno CLI) not found. Install: npm i -g @usebruno/cli" >&2
+# Bruno CLI — prefer local node_modules, then global, then npx
+if [[ -x "${REPO_ROOT}/bruno/node_modules/.bin/bru" ]]; then
+  BRU="${REPO_ROOT}/bruno/node_modules/.bin/bru"
+elif command -v bru &>/dev/null; then
+  BRU="bru"
+elif command -v npx &>/dev/null; then
+  BRU="npx --yes @usebruno/cli"
+else
+  echo "Error: 'bru' (Bruno CLI) not found. Install: npm i -g @usebruno/cli or run 'npm install' in bruno/" >&2
   exit 1
 fi
+echo "Using bru: ${BRU}"
 
 mkdir -p "$(dirname "${OUTPUT_COLLECTION}")"
-bru import openapi \
+$BRU import openapi \
   --source "${SPEC_FILE}" \
   --output "${OUTPUT_COLLECTION}" \
   --collection-name "${COLLECTION_NAME}" \

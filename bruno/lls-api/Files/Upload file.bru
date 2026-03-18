@@ -1,0 +1,20 @@
+meta {
+  name: Upload file
+  type: http
+  seq: 2
+  tags: [
+    Files
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/files
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  file: 
+  purpose: 
+  expires_after: 
+}

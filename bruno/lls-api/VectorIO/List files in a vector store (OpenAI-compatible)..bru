@@ -1,0 +1,26 @@
+meta {
+  name: List files in a vector store (OpenAI-compatible).
+  type: http
+  seq: 10
+  tags: [
+    VectorIO
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/vector_stores/:vector_store_id/files
+  body: none
+  auth: inherit
+}
+
+params:query {
+  limit: 20
+  order: desc
+  ~after: 
+  ~before: 
+  ~filter: 
+}
+
+params:path {
+  vector_store_id: 
+}

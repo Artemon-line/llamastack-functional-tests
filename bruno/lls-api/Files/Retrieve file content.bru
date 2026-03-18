@@ -1,0 +1,18 @@
+meta {
+  name: Retrieve file content
+  type: http
+  seq: 5
+  tags: [
+    Files
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/files/:file_id/content
+  body: none
+  auth: inherit
+}
+
+params:path {
+  file_id: 
+}

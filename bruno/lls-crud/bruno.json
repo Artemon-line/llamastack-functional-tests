@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "LLS CRUD",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

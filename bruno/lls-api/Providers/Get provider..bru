@@ -1,0 +1,18 @@
+meta {
+  name: Get provider.
+  type: http
+  seq: 2
+  tags: [
+    Providers
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/providers/:provider_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  provider_id: 
+}

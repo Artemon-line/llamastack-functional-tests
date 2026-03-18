@@ -1,0 +1,14 @@
+meta {
+  name: List all benchmarks.
+  type: http
+  seq: 1
+  tags: [
+    Benchmarks
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1alpha/eval/benchmarks
+  body: none
+  auth: inherit
+}

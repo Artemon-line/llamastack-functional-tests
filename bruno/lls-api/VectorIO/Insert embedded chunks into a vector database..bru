@@ -1,0 +1,42 @@
+meta {
+  name: Insert embedded chunks into a vector database.
+  type: http
+  seq: 1
+  tags: [
+    VectorIO
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/vector-io/insert
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "vector_store_id": "",
+    "chunks": [
+      {
+        "content": "",
+        "chunk_id": "",
+        "metadata": {},
+        "chunk_metadata": {
+          "chunk_id": "",
+          "document_id": "",
+          "source": "",
+          "created_timestamp": "",
+          "updated_timestamp": "",
+          "chunk_window": "",
+          "chunk_tokenizer": "",
+          "content_token_count": "",
+          "metadata_token_count": ""
+        },
+        "embedding": [],
+        "embedding_model": "",
+        "embedding_dimension": 0
+      }
+    ],
+    "ttl_seconds": ""
+  }
+}

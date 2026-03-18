@@ -1,0 +1,21 @@
+meta {
+  name: List vector stores (OpenAI-compatible).
+  type: http
+  seq: 4
+  tags: [
+    VectorIO
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/vector_stores
+  body: none
+  auth: inherit
+}
+
+params:query {
+  limit: 20
+  order: desc
+  ~after: 
+  ~before: 
+}

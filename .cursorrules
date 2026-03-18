@@ -1,0 +1,10 @@
+See AGENTS.md for full project context, test strategy, and Bruno .bru file conventions.
+
+Key rules:
+- Never edit files in bruno/lls-api/ (auto-generated from OpenAPI)
+- Add CRUD tests in bruno/lls-crud/NN-group/Action Resource.bru
+- Use {{baseUrl}} (camelCase) for the server URL and {{model}} for inference model
+- Always read the generated .bru file in lls-api/ before writing its CRUD counterpart
+- Include script:post-response blocks with status and shape assertions
+- Use bru.setEnvVar() to chain IDs between create/get/delete requests
+- Use seq in meta to control execution order within folders

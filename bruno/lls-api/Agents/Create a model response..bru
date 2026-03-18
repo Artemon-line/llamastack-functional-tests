@@ -1,0 +1,48 @@
+meta {
+  name: Create a model response.
+  type: http
+  seq: 3
+  tags: [
+    Agents
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/responses
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "input": "",
+    "model": "",
+    "background": false,
+    "prompt": "",
+    "instructions": "",
+    "parallel_tool_calls": "",
+    "previous_response_id": "",
+    "prompt_cache_key": "",
+    "conversation": "",
+    "store": "",
+    "stream": "",
+    "temperature": "",
+    "top_p": "",
+    "frequency_penalty": "",
+    "text": "",
+    "tool_choice": "",
+    "tools": "",
+    "include": "",
+    "max_infer_iters": "",
+    "guardrails": "",
+    "max_tool_calls": "",
+    "max_output_tokens": "",
+    "reasoning": "",
+    "safety_identifier": "",
+    "service_tier": "",
+    "metadata": "",
+    "truncation": "",
+    "top_logprobs": "",
+    "presence_penalty": ""
+  }
+}

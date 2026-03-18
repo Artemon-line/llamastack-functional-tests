@@ -1,0 +1,18 @@
+meta {
+  name: Delete a response.
+  type: http
+  seq: 2
+  tags: [
+    Agents
+  ]
+}
+
+delete {
+  url: {{baseUrl}}/v1/responses/:response_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  response_id: 
+}

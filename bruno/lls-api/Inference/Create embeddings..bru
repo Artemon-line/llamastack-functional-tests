@@ -1,0 +1,24 @@
+meta {
+  name: Create embeddings.
+  type: http
+  seq: 5
+  tags: [
+    Inference
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/embeddings
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "model": "",
+    "input": "",
+    "encoding_format": "float",
+    "dimensions": 0,
+    "user": ""
+  }
+}

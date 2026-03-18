@@ -1,0 +1,46 @@
+meta {
+  name: Create chat completions.
+  type: http
+  seq: 1
+  tags: [
+    Inference
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/chat/completions
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "model": "",
+    "messages": [],
+    "frequency_penalty": "",
+    "function_call": "",
+    "functions": "",
+    "logit_bias": "",
+    "logprobs": "",
+    "max_completion_tokens": "",
+    "max_tokens": "",
+    "n": "",
+    "parallel_tool_calls": "",
+    "presence_penalty": "",
+    "response_format": "",
+    "seed": "",
+    "stop": "",
+    "stream": "",
+    "stream_options": "",
+    "temperature": "",
+    "tool_choice": "",
+    "tools": "",
+    "top_logprobs": "",
+    "top_p": "",
+    "user": "",
+    "safety_identifier": "",
+    "service_tier": "",
+    "reasoning_effort": "",
+    "prompt_cache_key": ""
+  }
+}

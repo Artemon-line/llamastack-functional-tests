@@ -1,0 +1,18 @@
+meta {
+  name: Delete a conversation.
+  type: http
+  seq: 4
+  tags: [
+    Conversations
+  ]
+}
+
+delete {
+  url: {{baseUrl}}/v1/conversations/:conversation_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  conversation_id: 
+}

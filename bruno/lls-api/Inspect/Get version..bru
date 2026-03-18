@@ -1,0 +1,14 @@
+meta {
+  name: Get version.
+  type: http
+  seq: 3
+  tags: [
+    Inspect
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/version
+  body: none
+  auth: inherit
+}

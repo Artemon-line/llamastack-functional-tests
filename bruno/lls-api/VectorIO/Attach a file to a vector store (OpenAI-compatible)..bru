@@ -1,0 +1,26 @@
+meta {
+  name: Attach a file to a vector store (OpenAI-compatible).
+  type: http
+  seq: 9
+  tags: [
+    VectorIO
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/vector_stores/:vector_store_id/files
+  body: json
+  auth: inherit
+}
+
+params:path {
+  vector_store_id: 
+}
+
+body:json {
+  {
+    "file_id": "",
+    "attributes": "",
+    "chunking_strategy": ""
+  }
+}

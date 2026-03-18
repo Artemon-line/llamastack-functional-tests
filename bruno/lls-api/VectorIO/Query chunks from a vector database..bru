@@ -1,0 +1,22 @@
+meta {
+  name: Query chunks from a vector database.
+  type: http
+  seq: 2
+  tags: [
+    VectorIO
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/vector-io/query
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "vector_store_id": "",
+    "query": "",
+    "params": ""
+  }
+}

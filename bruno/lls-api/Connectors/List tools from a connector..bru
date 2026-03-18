@@ -1,0 +1,22 @@
+meta {
+  name: List tools from a connector.
+  type: http
+  seq: 3
+  tags: [
+    Connectors
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1alpha/connectors/:connector_id/tools
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~authorization: 
+}
+
+params:path {
+  connector_id: 
+}

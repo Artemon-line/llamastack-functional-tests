@@ -1,0 +1,26 @@
+meta {
+  name: Create a vector store file batch (OpenAI-compatible).
+  type: http
+  seq: 15
+  tags: [
+    VectorIO
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/vector_stores/:vector_store_id/file_batches
+  body: json
+  auth: inherit
+}
+
+params:path {
+  vector_store_id: 
+}
+
+body:json {
+  {
+    "file_ids": [],
+    "attributes": "",
+    "chunking_strategy": ""
+  }
+}

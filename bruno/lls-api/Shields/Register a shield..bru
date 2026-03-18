@@ -1,0 +1,23 @@
+meta {
+  name: Register a shield.
+  type: http
+  seq: 2
+  tags: [
+    Shields
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/shields
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "shield_id": "",
+    "provider_shield_id": "",
+    "provider_id": "",
+    "params": ""
+  }
+}

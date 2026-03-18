@@ -1,0 +1,18 @@
+meta {
+  name: List all available API routes
+  type: http
+  seq: 3
+  tags: [
+    Admin
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1alpha/admin/inspect/routes
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~api_filter: 
+}

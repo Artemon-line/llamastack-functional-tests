@@ -1,0 +1,22 @@
+meta {
+  name: Get a connector by its ID.
+  type: http
+  seq: 4
+  tags: [
+    Connectors
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1alpha/connectors/:connector_id
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~authorization: 
+}
+
+params:path {
+  connector_id: 
+}

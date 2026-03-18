@@ -1,0 +1,25 @@
+meta {
+  name: Update a vector store file (OpenAI-compatible).
+  type: http
+  seq: 12
+  tags: [
+    VectorIO
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/vector_stores/:vector_store_id/files/:file_id
+  body: json
+  auth: inherit
+}
+
+params:path {
+  vector_store_id: 
+  file_id: 
+}
+
+body:json {
+  {
+    "attributes": {}
+  }
+}

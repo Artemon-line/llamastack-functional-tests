@@ -1,0 +1,14 @@
+meta {
+  name: List models using the OpenAI API.
+  type: http
+  seq: 1
+  tags: [
+    Models
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/models
+  body: none
+  auth: inherit
+}

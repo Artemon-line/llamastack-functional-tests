@@ -1,0 +1,14 @@
+meta {
+  name: List all available providers
+  type: http
+  seq: 1
+  tags: [
+    Admin
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1alpha/admin/providers
+  body: none
+  auth: inherit
+}

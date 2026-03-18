@@ -1,0 +1,15 @@
+meta {
+  name: Get Tool Group
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/v1/toolgroups/:toolgroup_id
+  body: none
+  auth: inherit
+}
+
+params:path {
+  toolgroup_id: 
+}

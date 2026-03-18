@@ -4,6 +4,6 @@
   },
   "scripts": {
     "bruno:generate": "bru import openapi --source bruno/openapi.json --output bruno/lls-api --collection-name \"LLS API\"",
-    "bruno:run": "bru run lls-crud"
+    "bruno:run": "cd lls-api && bru run . -r"
   }
 }

@@ -1,0 +1,21 @@
+meta {
+  name: List all responses.
+  type: http
+  seq: 4
+  tags: [
+    Agents
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/responses
+  body: none
+  auth: inherit
+}
+
+params:query {
+  limit: 50
+  order: desc
+  ~after: 
+  ~model: 
+}

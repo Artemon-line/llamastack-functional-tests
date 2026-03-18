@@ -1,0 +1,23 @@
+meta {
+  name: Get a paginated list of rows from a dataset.
+  type: http
+  seq: 1
+  tags: [
+    DatasetIO
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1beta/datasetio/iterrows/:dataset_id
+  body: none
+  auth: inherit
+}
+
+params:query {
+  ~start_index: 
+  ~limit: 
+}
+
+params:path {
+  dataset_id: 
+}

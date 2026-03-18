@@ -1,0 +1,22 @@
+meta {
+  name: Score a batch of rows.
+  type: http
+  seq: 2
+  tags: [
+    Scoring
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/scoring/score-batch
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "dataset_id": "",
+    "scoring_functions": {},
+    "save_results_dataset": false
+  }
+}

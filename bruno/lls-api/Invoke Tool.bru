@@ -1,0 +1,19 @@
+meta {
+  name: Invoke Tool
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v1/tool-runtime/invoke
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "tool_name": "",
+    "kwargs": {},
+    "authorization": ""
+  }
+}

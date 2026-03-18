@@ -1,0 +1,21 @@
+meta {
+  name: Create Moderation
+  type: http
+  seq: 2
+  tags: [
+    Safety
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/moderations
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "input": "",
+    "model": ""
+  }
+}

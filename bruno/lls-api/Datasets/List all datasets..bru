@@ -1,0 +1,14 @@
+meta {
+  name: List all datasets.
+  type: http
+  seq: 1
+  tags: [
+    Datasets
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1beta/datasets
+  body: none
+  auth: inherit
+}

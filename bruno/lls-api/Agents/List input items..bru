@@ -1,0 +1,26 @@
+meta {
+  name: List input items.
+  type: http
+  seq: 5
+  tags: [
+    Agents
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/responses/:response_id/input_items
+  body: none
+  auth: inherit
+}
+
+params:query {
+  limit: 20
+  order: desc
+  ~after: 
+  ~before: 
+  ~include: 
+}
+
+params:path {
+  response_id: 
+}

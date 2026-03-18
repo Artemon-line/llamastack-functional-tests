@@ -1,0 +1,25 @@
+meta {
+  name: Register a benchmark.
+  type: http
+  seq: 2
+  tags: [
+    Benchmarks
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1alpha/eval/benchmarks
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "benchmark_id": "",
+    "dataset_id": "",
+    "scoring_functions": [],
+    "provider_benchmark_id": "",
+    "provider_id": "",
+    "metadata": ""
+  }
+}

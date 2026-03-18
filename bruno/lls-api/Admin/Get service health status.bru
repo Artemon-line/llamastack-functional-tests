@@ -1,0 +1,14 @@
+meta {
+  name: Get service health status
+  type: http
+  seq: 4
+  tags: [
+    Admin
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1alpha/admin/health
+  body: none
+  auth: inherit
+}

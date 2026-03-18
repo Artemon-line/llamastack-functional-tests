@@ -1,0 +1,24 @@
+meta {
+  name: Create items.
+  type: http
+  seq: 5
+  tags: [
+    Conversations
+  ]
+}
+
+post {
+  url: {{baseUrl}}/v1/conversations/:conversation_id/items
+  body: json
+  auth: inherit
+}
+
+params:path {
+  conversation_id: 
+}
+
+body:json {
+  {
+    "items": []
+  }
+}

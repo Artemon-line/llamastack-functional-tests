@@ -1,0 +1,14 @@
+meta {
+  name: Get health status.
+  type: http
+  seq: 2
+  tags: [
+    Inspect
+  ]
+}
+
+get {
+  url: {{baseUrl}}/v1/health
+  body: none
+  auth: inherit
+}
