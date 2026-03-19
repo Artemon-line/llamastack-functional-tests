@@ -1,0 +1,31 @@
+meta {
+  name: List Providers
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/providers
+  body: none
+  auth: none
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.eql(200);
+  });
+
+  test("Has data array with providers", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("data");
+    expect(body.data).to.be.an("array");
+    expect(body.data.length).to.be.greaterThan(0);
+  });
+
+  test("Provider has required fields", function() {
+    const provider = res.getBody().data[0];
+    expect(provider).to.have.property("api");
+    expect(provider).to.have.property("provider_id");
+    expect(provider).to.have.property("provider_type");
+  });
+}

@@ -1,0 +1,36 @@
+meta {
+  name: Create Vector Store
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v1/vector_stores
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+}
+
+body:json {
+  {
+    "name": "test-vector-store",
+    "embedding_model": "{{embedding_model}}",
+    "embedding_dimension": 768
+  }
+}
+
+tests {
+  test("Status is 200 or 201", function() {
+    expect([200, 201]).to.include(res.getStatus());
+  });
+
+  test("Vector store ID saved", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+    expect(body.id).to.be.a("string");
+    bru.setEnvVar("vector_store_id", body.id);
+  });
+}

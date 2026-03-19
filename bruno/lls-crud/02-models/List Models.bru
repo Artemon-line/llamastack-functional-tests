@@ -1,0 +1,31 @@
+meta {
+  name: List Models
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/v1/models
+  body: none
+  auth: none
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.eql(200);
+  });
+
+  test("Has data array with models", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("data");
+    expect(body.data).to.be.an("array");
+    expect(body.data.length).to.be.greaterThan(0);
+  });
+
+  test("Model has required fields", function() {
+    const model = res.getBody().data[0];
+    expect(model).to.have.property("identifier");
+    expect(model).to.have.property("provider_id");
+    expect(model).to.have.property("model_type");
+  });
+}

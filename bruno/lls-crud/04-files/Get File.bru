@@ -1,0 +1,22 @@
+meta {
+  name: Get File
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/v1/files/{{file_id}}
+  body: none
+  auth: none
+}
+
+tests {
+  test("Status is 200", function() {
+    expect(res.getStatus()).to.eql(200);
+  });
+
+  test("Returns file with correct ID", function() {
+    const body = res.getBody();
+    expect(body).to.have.property("id");
+  });
+}
