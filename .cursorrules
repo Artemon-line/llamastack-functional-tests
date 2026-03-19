@@ -1,6 +1,8 @@
 See AGENTS.md for full project context, test strategy, and Bruno .bru file conventions.
 
 Key rules:
+- Always match llama-stack-client version to the server before running notebooks. Query server version, pin client in pyproject.toml (e.g., ==0.3.5), run uv sync. Use uv run for all Python/pytest commands.
+- Notebook execution requires ipykernel in pyproject.toml deps. Always run uv sync before running notebooks.
 - NEVER hardcode model names or provider-specific values. Models must come from variables ({{model}} in Bruno, MODEL env var in notebooks) with NO defaults. Embedding models use {{embedding_model}}. Only baseUrl/BASE_URL may have a default (http://localhost:8321).
 - Never edit files in bruno/lls-api/ (auto-generated from OpenAPI)
 - Add CRUD tests in bruno/lls-crud/NN-group/Action Resource.bru

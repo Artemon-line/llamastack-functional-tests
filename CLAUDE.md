@@ -10,6 +10,8 @@ See [AGENTS.md](AGENTS.md) for full project context, test strategy, and Bruno co
 - **URL variable:** `{{baseUrl}}` (camelCase) in Bruno; `BASE_URL` env in notebooks
 - **Model variable:** `{{model}}` in Bruno; `MODEL` env in notebooks
 - **NEVER hardcode model names** — always pass via variable/env. No defaults for MODEL.
+- **Client/server version match:** Before running notebooks, verify `llama-stack-client` version in `pyproject.toml` matches the server (e.g., server `0.3.5.1` → client `==0.3.5`). Use `uv sync` to install, `uv run` to execute.
+- **Notebook deps:** `ipykernel` must be in `pyproject.toml` dependencies. Run `uv sync` before executing notebooks.
 
 ## Workflow for Adding CRUD Tests
 
@@ -23,4 +25,4 @@ See [AGENTS.md](AGENTS.md) for full project context, test strategy, and Bruno co
 1. Create notebook in `notebooks/` with markdown intro + code cells with assertions
 2. Read MODEL from `os.environ.get("MODEL")` — no default, fail fast with clear error
 3. Assert on structure (types, fields), never on content (LLM output varies)
-4. Verify notebook runs: `BASE_URL=... MODEL=... python3 -m pytest tests/test_notebooks.py -k notebook_name -v`
+4. Verify notebook runs: `BASE_URL=... MODEL=... uv run pytest tests/test_notebooks.py -k notebook_name -v`

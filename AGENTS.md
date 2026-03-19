@@ -165,11 +165,17 @@ Analyze `lls-api/` subfolders and the server's `/v1/providers` response to deter
 ## Running Tests
 
 ```bash
+# First: ensure dependencies are installed (includes ipykernel for notebooks)
+uv sync
+
 # Run all generated tests
 cd bruno && npm run bruno:run -- --env-var baseUrl=http://localhost:8321 --env-var model=vllm-inference/llama-3-2-3b
 
 # Run CRUD tests only
 cd bruno/lls-crud && npx --prefix .. bru run . -r --env-var baseUrl=http://localhost:8321 --env-var model=vllm-inference/llama-3-2-3b
+
+# Run notebooks (requires ipykernel — included in pyproject.toml deps)
+BASE_URL=http://localhost:8321 MODEL=vllm-inference/llama-3-2-3b uv run pytest tests/test_notebooks.py -v
 
 # Full provider-matrix run
 BASE_URL=http://localhost:8321 MODEL=vllm-inference/llama-3-2-3b ./scripts/run-tests-with-providers.sh
@@ -177,6 +183,8 @@ BASE_URL=http://localhost:8321 MODEL=vllm-inference/llama-3-2-3b ./scripts/run-t
 
 ## Important Rules
 
+- **Always match `llama-stack-client` version to the server.** Before running notebooks or writing tests, query the server version (`GET /v1/version` or `GET /v1/inspect/version`) and ensure `llama-stack-client` in `pyproject.toml` is pinned to the matching version (e.g., server `0.3.5.1+rhai0` → client `==0.3.5`). Use `uv sync` to install. Mismatched client/server versions cause silent API failures and wrong response schemas.
+- **Use `uv` for Python dependency management.** Always use `uv sync` to install dependencies and `uv run` to execute Python/pytest commands. Do not use `pip install` or raw `python` — use the project venv managed by `uv`. Before running notebooks, ensure `ipykernel` is in `pyproject.toml` dependencies and run `uv sync`.
 - **Never hardcode model names or provider-specific values.** Models and embedding models must come from variables (`{{model}}`, `{{embedding_model}}` in Bruno; `MODEL` env var in notebooks). Defaults for `baseUrl` are OK (`http://localhost:8321`), but model names are environment-specific and must always be passed in. Same applies to embedding model names, provider IDs, and API keys.
 - **Never edit files in `lls-api/`** — they are auto-generated
 - **Always read the generated `.bru` file** for an endpoint before writing its CRUD test — it shows the correct URL, method, and request body schema
