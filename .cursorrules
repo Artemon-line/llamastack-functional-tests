@@ -1,10 +1,12 @@
 See AGENTS.md for full project context, test strategy, and Bruno .bru file conventions.
 
 Key rules:
+- NEVER hardcode model names or provider-specific values. Models must come from variables ({{model}} in Bruno, MODEL env var in notebooks) with NO defaults. Embedding models use {{embedding_model}}. Only baseUrl/BASE_URL may have a default (http://localhost:8321).
 - Never edit files in bruno/lls-api/ (auto-generated from OpenAPI)
 - Add CRUD tests in bruno/lls-crud/NN-group/Action Resource.bru
-- Use {{baseUrl}} (camelCase) for the server URL and {{model}} for inference model
+- Use {{baseUrl}} (camelCase) for the server URL
 - Always read the generated .bru file in lls-api/ before writing its CRUD counterpart
 - Include script:post-response blocks with status and shape assertions
 - Use bru.setEnvVar() to chain IDs between create/get/delete requests
 - Use seq in meta to control execution order within folders
+- Notebooks: assert on structure (types, fields), never on content (LLM output varies)

@@ -177,8 +177,20 @@ BASE_URL=http://localhost:8321 MODEL=vllm-inference/llama-3-2-3b ./scripts/run-t
 
 ## Important Rules
 
+- **Never hardcode model names or provider-specific values.** Models and embedding models must come from variables (`{{model}}`, `{{embedding_model}}` in Bruno; `MODEL` env var in notebooks). Defaults for `baseUrl` are OK (`http://localhost:8321`), but model names are environment-specific and must always be passed in. Same applies to embedding model names, provider IDs, and API keys.
 - **Never edit files in `lls-api/`** — they are auto-generated
 - **Always read the generated `.bru` file** for an endpoint before writing its CRUD test — it shows the correct URL, method, and request body schema
 - **Use `baseUrl`** (camelCase), not `base_url` — this matches the OpenAPI-generated collection
 - **Test against a running server** before committing — run `bru run . -r` from the collection dir
 - **Branch per LLS version** — e.g., `0.6.0.1+rhai0` for LLS 0.6.x, `0.2.22.2+rhai0` for LLS 0.2.x
+
+## Notebook Conventions
+
+Notebooks in `notebooks/` serve as **both executable tests and feature demos**. They are run as pytest tests via `nbformat` ExecutePreprocessor.
+
+- **No hardcoded model names.** Read `MODEL` from `os.environ.get("MODEL")` with **no default**. Fail fast with a clear error if not set.
+- `BASE_URL` may default to `http://localhost:8321`.
+- Assert on **structure** (field names, types, array lengths > 0), never on **content** (LLM output is non-deterministic).
+- Each notebook starts with a markdown cell explaining what it demonstrates.
+- **Check existing notebooks before creating new ones.** Do not duplicate — modify or extend existing notebooks. Only create a new notebook for a genuinely new feature or scenario.
+- See `notebooks/README.md` for the full pattern including `config.notebook_env` usage.

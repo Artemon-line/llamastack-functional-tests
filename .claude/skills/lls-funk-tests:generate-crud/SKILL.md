@@ -127,7 +127,8 @@ vars:pre-request {
 
 **Rules from AGENTS.md:**
 - `{{baseUrl}}` (camelCase) for server URL
-- `{{model}}` for inference model
+- `{{model}}` for inference model, `{{embedding_model}}` for embedding model
+- **NEVER hardcode model names or provider-specific values.** Models must be variables passed at runtime, not string literals in `.bru` files or notebooks. Collection-level defaults in `vars:pre-request` are OK for `baseUrl` and `embedding_model` (auto-discovered from server), but `model` must always be passed via `--env-var`.
 - `seq` in meta controls order within folder
 - `bru.setEnvVar()` to chain IDs between requests
 - Always assert status codes and response shape
