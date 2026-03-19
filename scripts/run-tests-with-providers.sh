@@ -5,18 +5,14 @@
 #
 # Example:
 #   export BASE_URL="http://localhost:8321"
-#   export MODEL="my-model"
-#   export FILES_PROVIDER="remote::s3"
-#   export INFERENCE_PROVIDER="remote::azure"
-#   export VECTOR_IO_PROVIDER="remote::pgvector"
-#   ./local/scripts/run-tests-with-providers.sh
+#   export MODEL="vllm-inference/llama-3-2-3b"
+#   ./scripts/run-tests-with-providers.sh
 
 set -e
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BRUNO_DIR="${REPO_ROOT}/bruno"
 NOTEBOOKS_DIR="${REPO_ROOT}/notebooks"
-ENV_NAME="lls"
 
 # Required
 if [[ -z "${BASE_URL}" ]]; then
@@ -24,7 +20,7 @@ if [[ -z "${BASE_URL}" ]]; then
   exit 1
 fi
 if [[ -z "${MODEL}" ]]; then
-  echo "Error: MODEL is required for inference tests (e.g. your deployment model name)" >&2
+  echo "Error: MODEL is required for inference tests (e.g. vllm-inference/llama-3-2-3b)" >&2
   exit 1
 fi
 
@@ -41,43 +37,40 @@ echo "INFERENCE_PROVIDER=${INFERENCE_PROVIDER}"
 echo "VECTOR_IO_PROVIDER=${VECTOR_IO_PROVIDER}"
 echo ""
 
-# Build Bruno env-var overrides so base_url and model (and optional provider labels) are set
+# Resolve bru CLI — prefer local node_modules, then global, then npx
+if [[ -x "${BRUNO_DIR}/node_modules/.bin/bru" ]]; then
+  BRU="${BRUNO_DIR}/node_modules/.bin/bru"
+elif command -v bru &>/dev/null; then
+  BRU="bru"
+elif command -v npx &>/dev/null; then
+  BRU="npx --yes @usebruno/cli"
+else
+  echo "Error: 'bru' (Bruno CLI) not found. Install: npm i -g @usebruno/cli or run 'npm install' in bruno/" >&2
+  exit 1
+fi
+echo "Using bru: ${BRU}"
+
+# Bruno env-var overrides (baseUrl is camelCase to match generated collections)
 _env_vars=(
-  --env-var "base_url=${BASE_URL}"
+  --env-var "baseUrl=${BASE_URL}"
   --env-var "model=${MODEL}"
   --env-var "inference_provider=${INFERENCE_PROVIDER}"
   --env-var "files_provider=${FILES_PROVIDER}"
   --env-var "vector_io_provider=${VECTOR_IO_PROVIDER}"
 )
 
-ENV_FILE="${BRUNO_DIR}/environments/lls.bru"
-cd "$REPO_ROOT"
-
-# Phase 1: Bruno files (isolated Files API endpoints)
-if [[ -d "${BRUNO_DIR}/files" ]]; then
-  echo ">>> Phase 1: Bruno files (isolated endpoints)"
-  if command -v bru &>/dev/null; then
-    bru run "${BRUNO_DIR}/files" --env-file "$ENV_FILE" "${_env_vars[@]}" || exit 1
-  else
-    echo "Warning: 'bru' not found; skipping Bruno. Install Bruno CLI: npm i -g @usebruno/cli" >&2
-  fi
+# Phase 1: Bruno lls-api (generated from OpenAPI, all endpoints)
+LLS_API_DIR="${BRUNO_DIR}/lls-api"
+if [[ -d "${LLS_API_DIR}" ]]; then
+  echo ">>> Phase 1: Bruno lls-api (all endpoints, recursive)"
+  (cd "${LLS_API_DIR}" && $BRU run . -r "${_env_vars[@]}") || exit 1
 else
-  echo ">>> Phase 1: Bruno files folder not found at ${BRUNO_DIR}/files; skipping."
+  echo ">>> Phase 1: lls-api collection not found at ${LLS_API_DIR}; generate with ./bruno/scripts/generate-from-openapi.sh"
 fi
 
-# Phase 2: Bruno full (all collections)
-echo ">>> Phase 2: Bruno full (all collections)"
-if [[ -d "$BRUNO_DIR" ]] && command -v bru &>/dev/null; then
-  bru run "$BRUNO_DIR" --env-file "$ENV_FILE" "${_env_vars[@]}" || exit 1
-else
-  echo "Warning: Bruno dir not found or 'bru' not installed; skipping."
-fi
-
-# Phase 3: Notebooks (full-flow integration) — run as pytest tests (ExecutePreprocessor)
-# Notebooks read same params from env via config/notebook_env.py (os.environ.get).
-# See: https://blog.iqmo.com/blog/python/jupyter_notebook_testing/
+# Phase 2: Notebooks (full-flow integration) — run as pytest tests (ExecutePreprocessor)
 if [[ -d "$NOTEBOOKS_DIR" ]]; then
-  echo ">>> Phase 3: Notebooks (full flow) — pytest"
+  echo ">>> Phase 2: Notebooks (full flow) — pytest"
   export BASE_URL MODEL FILES_PROVIDER INFERENCE_PROVIDER VECTOR_IO_PROVIDER
   export PYTHONPATH="${REPO_ROOT}:${PYTHONPATH:-}"
   if command -v pytest &>/dev/null; then
@@ -93,7 +86,7 @@ if [[ -d "$NOTEBOOKS_DIR" ]]; then
     echo "Warning: neither 'pytest' nor 'jupyter' found; skipping notebooks. Install: pip install -r requirements-test.txt" >&2
   fi
 else
-  echo ">>> Phase 3: No notebooks at ${NOTEBOOKS_DIR}; skipping."
+  echo ">>> Phase 2: No notebooks at ${NOTEBOOKS_DIR}; skipping."
 fi
 
 echo "=== Done ==="

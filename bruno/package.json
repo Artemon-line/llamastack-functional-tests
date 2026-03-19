@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "@usebruno/cli": "^3.1.3"
+  },
+  "scripts": {
+    "bruno:generate": "bru import openapi --source bruno/openapi.json --output bruno/lls-api --collection-name \"LLS API\"",
+    "bruno:run": "cd lls-api && bru run . -r"
+  }
+}
