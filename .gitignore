@@ -5,3 +5,8 @@ __pycache__/
 *.egg-info/
 node_modules
 bruno/notebooks/
+.env
+.venv/
+dist/
+build/
+.claude/
