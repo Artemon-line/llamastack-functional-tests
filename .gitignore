@@ -9,4 +9,4 @@ bruno/notebooks/
 .venv/
 dist/
 build/
-.claude/
+.claude/settings.local.json
