@@ -15,7 +15,10 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BRUNO_DIR="${REPO_ROOT}/bruno"
 NOTEBOOKS_DIR="${REPO_ROOT}/notebooks"
+REPORTS_DIR="${REPO_ROOT}/reports"
 EXIT_CODE=0
+
+mkdir -p "${REPORTS_DIR}"
 
 if [[ -z "${BASE_URL:-}" ]]; then
   echo "Error: BASE_URL is required (e.g. http://localhost:8321)" >&2
@@ -96,7 +99,7 @@ if [[ -n "${BRU}" && -d "${LLS_CRUD_DIR}" ]]; then
   fi
   # Print accurate summary from JSON
   if [[ -s "${_bruno_json}" ]]; then
-    if ! python3 "${REPO_ROOT}/scripts/bruno-summary.py" "${_bruno_json}"; then
+    if ! python3 "${REPO_ROOT}/scripts/bruno-summary.py" "${_bruno_json}" "${REPORTS_DIR}/bruno-crud.xml"; then
       EXIT_CODE=1
     fi
   else
@@ -115,7 +118,7 @@ if [[ -d "$NOTEBOOKS_DIR" ]]; then
   echo ">>> Phase 2: Notebooks — pytest"
   export BASE_URL MODEL FILES_PROVIDER INFERENCE_PROVIDER VECTOR_IO_PROVIDER EMBEDDING_MODEL
   export PYTHONPATH="${REPO_ROOT}:${PYTHONPATH:-}"
-  if ! (cd "$REPO_ROOT" && uv run pytest tests/test_notebooks.py -v --tb=short); then
+  if ! (cd "$REPO_ROOT" && uv run pytest tests/test_notebooks.py -v --tb=short --junitxml="${REPORTS_DIR}/notebooks.xml"); then
     EXIT_CODE=1
   fi
   echo ""
