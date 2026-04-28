@@ -3,6 +3,7 @@ Run Jupyter notebooks as tests: verify each notebook executes to completion with
 unhandled exceptions. Uses pytest + nbformat + nbconvert (ExecutePreprocessor).
 See: https://blog.iqmo.com/blog/python/jupyter_notebook_testing/
 """
+
 import pytest
 from pathlib import Path
 import nbformat
@@ -19,9 +20,7 @@ def _collect_notebooks():
     if not NOTEBOOK_DIR.exists():
         return []
     return [
-        f
-        for f in sorted(NOTEBOOK_DIR.glob("*.ipynb"))
-        if f.name not in SKIP_NOTEBOOKS
+        f for f in sorted(NOTEBOOK_DIR.glob("*.ipynb")) if f.name not in SKIP_NOTEBOOKS
     ]
 
 
