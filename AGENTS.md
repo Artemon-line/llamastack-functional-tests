@@ -10,7 +10,7 @@ Functional tests for **LlamaStack (LLS)** using [Bruno](https://www.usebruno.com
 
 > **Note:** The layout below reflects the **current branch**. Each LLS version is tracked on its own branch (e.g., `0.6.0.1+rhai0`, `0.2.22.2+rhai0`). Collections, endpoints, and folder structure may differ between branches — always check what exists on the branch you are working on. Do NOT assume folders or files from another branch are present.
 
-```
+```text
 bruno/
   lls-api/            ← AUTO-GENERATED from OpenAPI (do NOT edit by hand)
     <ApiGroup>/        ← subfolder per API group (varies by LLS version)
@@ -38,12 +38,14 @@ scripts/
 ## Two-Layer Test Strategy
 
 ### Layer 1: `lls-api/` — Auto-generated (baseline)
+
 - Generated from OpenAPI spec via `./bruno/scripts/generate-from-openapi.sh`
 - Covers all endpoints with placeholder request bodies
 - **Never edit these files** — they get overwritten on regeneration
 - Purpose: smoke test that all endpoints are reachable
 
 ### Layer 2: `lls-crud/` — Hand-written (your task)
+
 - CRUD tests with **real request bodies**, **assertions**, and **variable chaining**
 - Organized in numbered folders for execution order (Bruno runs alphabetically)
 - This is where agents add value
