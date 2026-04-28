@@ -4,24 +4,20 @@ meta {
   seq: 1
 }
 
-http {
-  method: POST
-  url: {{base_url}}/v1/responses
+post {
+  url: {{baseUrl}}/v1/openai/v1/responses
   body: json
-  auth: none
+  auth: inherit
 }
 
 body:json {
-  "model": "{{model}}",
-  "input": [
-    {
-      "role": "user",
-      "content": "Say hello in one word."
-    }
-  ]
+  {
+    "model": "{{model}}",
+    "input": "Say hello in one word."
+  }
 }
 
-script: post-response {
+script:post-response {
   test("Status is 200 or 201", function() {
     const status = res.getStatus();
     expect([200, 201]).to.include(status);

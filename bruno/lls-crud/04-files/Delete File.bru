@@ -4,14 +4,13 @@ meta {
   seq: 4
 }
 
-http {
-  method: DELETE
-  url: {{base_url}}/v1/files/{{file_id}}
+delete {
+  url: {{baseUrl}}/v1/openai/v1/files/{{file_id}}
   body: none
-  auth: none
+  auth: inherit
 }
 
-script: post-response {
+script:post-response {
   test("Status is 200 or 204", function() {
     const status = res.getStatus();
     expect([200, 204]).to.include(status);
