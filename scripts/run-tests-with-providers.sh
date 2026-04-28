@@ -99,7 +99,7 @@ if [[ -n "${BRU}" && -d "${LLS_CRUD_DIR}" ]]; then
   fi
   # Print accurate summary from JSON
   if [[ -s "${_bruno_json}" ]]; then
-    if ! python3 "${REPO_ROOT}/scripts/bruno-summary.py" "${_bruno_json}" "${REPORTS_DIR}/bruno-crud.xml"; then
+    if ! python3 "${REPO_ROOT}/scripts/bruno_summary.py" "${_bruno_json}" "${REPORTS_DIR}/bruno-crud.xml"; then
       EXIT_CODE=1
     fi
   else

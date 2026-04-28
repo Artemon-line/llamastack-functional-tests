@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "--junitxml=reports/notebooks.xml"
+addopts = "--cov-report=term-missing"
 
 [tool.ruff]
 extend-exclude = ["bruno/"]
