@@ -1,99 +1,125 @@
 #!/usr/bin/env bash
-# Run Bruno (files + full) and notebooks for a given provider combination.
+# shellcheck disable=SC1091
+# Run Bruno CRUD and notebook tests for a given provider combination.
 # Requires: BASE_URL, MODEL (inference model name).
-# Optional: FILES_PROVIDER, INFERENCE_PROVIDER, VECTOR_IO_PROVIDER (for reporting/env).
+# Optional: FILES_PROVIDER, INFERENCE_PROVIDER, VECTOR_IO_PROVIDER,
+#           EMBEDDING_MODEL (for reporting/env).
 #
 # Example:
 #   export BASE_URL="http://localhost:8321"
-#   export MODEL="my-model"
-#   export FILES_PROVIDER="remote::s3"
-#   export INFERENCE_PROVIDER="remote::azure"
-#   export VECTOR_IO_PROVIDER="remote::pgvector"
-#   ./local/scripts/run-tests-with-providers.sh
+#   export MODEL="vllm-inference/llama-3-2-3b"
+#   ./scripts/run-tests-with-providers.sh
 
-set -e
+set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 BRUNO_DIR="${REPO_ROOT}/bruno"
 NOTEBOOKS_DIR="${REPO_ROOT}/notebooks"
-ENV_NAME="lls"
+EXIT_CODE=0
 
-# Required
-if [[ -z "${BASE_URL}" ]]; then
+if [[ -z "${BASE_URL:-}" ]]; then
   echo "Error: BASE_URL is required (e.g. http://localhost:8321)" >&2
   exit 1
 fi
-if [[ -z "${MODEL}" ]]; then
-  echo "Error: MODEL is required for inference tests (e.g. your deployment model name)" >&2
+if [[ -z "${MODEL:-}" ]]; then
+  echo "Error: MODEL is required for inference tests (e.g. vllm-inference/llama-3-2-3b)" >&2
   exit 1
 fi
 
-# Optional provider labels (for env and reporting)
 export FILES_PROVIDER="${FILES_PROVIDER:-}"
 export INFERENCE_PROVIDER="${INFERENCE_PROVIDER:-}"
 export VECTOR_IO_PROVIDER="${VECTOR_IO_PROVIDER:-}"
+export EMBEDDING_MODEL="${EMBEDDING_MODEL:-}"
 
+source "$(dirname "${BASH_SOURCE[0]}")/sync-client-version.sh"
+
+# Health-check helper: verify the server is reachable, restart port-forward if needed
+_ensure_server() {
+  if curl -sf --connect-timeout 3 "${BASE_URL}/v1/health" >/dev/null 2>&1; then
+    return 0
+  fi
+  echo "  Server unreachable at ${BASE_URL} — attempting port-forward restart..."
+  pkill -f "port-forward.*lls-vllm-test" 2>/dev/null || true
+  sleep 1
+  local ns="${OC_NAMESPACE:-lls-vllm-test}"
+  local svc="${OC_SERVICE:-svc/llama-stack-vllm-vertex-service}"
+  local port="${BASE_URL##*:}"  # extract port from http://host:PORT
+  oc port-forward -n "${ns}" "${svc}" "${port}:${port}" >/dev/null 2>&1 &
+  sleep 4
+  if curl -sf --connect-timeout 3 "${BASE_URL}/v1/health" >/dev/null 2>&1; then
+    echo "  Port-forward restored"
+    return 0
+  fi
+  echo "  Warning: could not restore connectivity to ${BASE_URL}" >&2
+  return 1
+}
+
+echo ""
 echo "=== Provider matrix test run ==="
-echo "BASE_URL=${BASE_URL}"
-echo "MODEL=${MODEL}"
-echo "FILES_PROVIDER=${FILES_PROVIDER}"
-echo "INFERENCE_PROVIDER=${INFERENCE_PROVIDER}"
-echo "VECTOR_IO_PROVIDER=${VECTOR_IO_PROVIDER}"
+echo "  BASE_URL           = ${BASE_URL}"
+echo "  MODEL              = ${MODEL}"
+echo "  EMBEDDING_MODEL    = ${EMBEDDING_MODEL}"
+echo "  INFERENCE_PROVIDER = ${INFERENCE_PROVIDER}"
+echo "  FILES_PROVIDER     = ${FILES_PROVIDER}"
+echo "  VECTOR_IO_PROVIDER = ${VECTOR_IO_PROVIDER}"
 echo ""
 
-# Build Bruno env-var overrides so base_url and model (and optional provider labels) are set
+# ── Bruno CLI ────────────────────────────────────────────────────────────────
+BRU=""
+if [[ -x "${BRUNO_DIR}/node_modules/.bin/bru" ]]; then
+  BRU="${BRUNO_DIR}/node_modules/.bin/bru"
+elif command -v bru &>/dev/null; then
+  BRU="bru"
+elif command -v npx &>/dev/null; then
+  BRU="npx --yes @usebruno/cli"
+fi
+
 _env_vars=(
-  --env-var "base_url=${BASE_URL}"
+  --env-var "baseUrl=${BASE_URL}"
   --env-var "model=${MODEL}"
   --env-var "inference_provider=${INFERENCE_PROVIDER}"
   --env-var "files_provider=${FILES_PROVIDER}"
   --env-var "vector_io_provider=${VECTOR_IO_PROVIDER}"
 )
 
-ENV_FILE="${BRUNO_DIR}/environments/lls.bru"
-cd "$REPO_ROOT"
-
-# Phase 1: Bruno files (isolated Files API endpoints)
-if [[ -d "${BRUNO_DIR}/files" ]]; then
-  echo ">>> Phase 1: Bruno files (isolated endpoints)"
-  if command -v bru &>/dev/null; then
-    bru run "${BRUNO_DIR}/files" --env-file "$ENV_FILE" "${_env_vars[@]}" || exit 1
-  else
-    echo "Warning: 'bru' not found; skipping Bruno. Install Bruno CLI: npm i -g @usebruno/cli" >&2
+# ── Phase 1: Bruno CRUD tests ───────────────────────────────────────────────
+LLS_CRUD_DIR="${BRUNO_DIR}/lls-crud"
+if [[ -n "${BRU}" && -d "${LLS_CRUD_DIR}" ]]; then
+  _ensure_server
+  echo ">>> Phase 1: Bruno CRUD tests"
+  _bruno_json=$(mktemp /tmp/bruno-results-XXXXXX.json)
+  # Run Bruno; filter out proxy warnings and the misleading built-in summary
+  if (cd "${LLS_CRUD_DIR}" && $BRU run . -r "${_env_vars[@]}" --output "${_bruno_json}") \
+       2>&1 | grep -v -e "proxy" -e "Proxy" -e "getSystem" -e "at async" -e "at .*/node_modules/" -e "^$" \
+              | sed '/📊 Execution Summary/,/└.*┘/d'; then
+    :
   fi
+  # Print accurate summary from JSON
+  if [[ -s "${_bruno_json}" ]]; then
+    if ! python3 "${REPO_ROOT}/scripts/bruno-summary.py" "${_bruno_json}"; then
+      EXIT_CODE=1
+    fi
+  else
+    echo "  Warning: no Bruno JSON output produced"
+    EXIT_CODE=1
+  fi
+  rm -f "${_bruno_json}"
+  echo ""
 else
-  echo ">>> Phase 1: Bruno files folder not found at ${BRUNO_DIR}/files; skipping."
+  echo ">>> Phase 1: skipped (Bruno CLI not found)"
 fi
 
-# Phase 2: Bruno full (all collections)
-echo ">>> Phase 2: Bruno full (all collections)"
-if [[ -d "$BRUNO_DIR" ]] && command -v bru &>/dev/null; then
-  bru run "$BRUNO_DIR" --env-file "$ENV_FILE" "${_env_vars[@]}" || exit 1
-else
-  echo "Warning: Bruno dir not found or 'bru' not installed; skipping."
-fi
-
-# Phase 3: Notebooks (full-flow integration) — run as pytest tests (ExecutePreprocessor)
-# Notebooks read same params from env via config/notebook_env.py (os.environ.get).
-# See: https://blog.iqmo.com/blog/python/jupyter_notebook_testing/
+# ── Phase 2: Notebooks ──────────────────────────────────────────────────────
 if [[ -d "$NOTEBOOKS_DIR" ]]; then
-  echo ">>> Phase 3: Notebooks (full flow) — pytest"
-  export BASE_URL MODEL FILES_PROVIDER INFERENCE_PROVIDER VECTOR_IO_PROVIDER
+  _ensure_server
+  echo ">>> Phase 2: Notebooks — pytest"
+  export BASE_URL MODEL FILES_PROVIDER INFERENCE_PROVIDER VECTOR_IO_PROVIDER EMBEDDING_MODEL
   export PYTHONPATH="${REPO_ROOT}:${PYTHONPATH:-}"
-  if command -v pytest &>/dev/null; then
-    (cd "$REPO_ROOT" && pytest tests/test_notebooks.py -v) || exit 1
-  elif command -v jupyter &>/dev/null; then
-    echo "Fallback: jupyter nbconvert (install pytest, nbformat, nbconvert for pytest-based runs)"
-    for nb in "$NOTEBOOKS_DIR"/*.ipynb; do
-      [[ -f "$nb" ]] || continue
-      echo "Executing $nb"
-      jupyter nbconvert --to notebook --execute --inplace --ExecutePreprocessor.timeout=300 "$nb" || exit 1
-    done
-  else
-    echo "Warning: neither 'pytest' nor 'jupyter' found; skipping notebooks. Install: pip install -r requirements-test.txt" >&2
+  if ! (cd "$REPO_ROOT" && uv run pytest tests/test_notebooks.py -v --tb=short); then
+    EXIT_CODE=1
   fi
-else
-  echo ">>> Phase 3: No notebooks at ${NOTEBOOKS_DIR}; skipping."
+  echo ""
 fi
 
-echo "=== Done ==="
+echo "=== Done (exit ${EXIT_CODE}) ==="
+exit $EXIT_CODE
