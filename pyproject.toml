@@ -17,7 +17,7 @@ dependencies = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "--cov=llamastack_functional_tests --cov-report=term-missing --junitxml=reports/notebooks.xml"
+addopts = "--cov-report=term-missing"
 
 [tool.ruff]
 extend-exclude = ["bruno/"]
