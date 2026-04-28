@@ -5,7 +5,7 @@ description = "Functional tests for LlamaStack (Bruno + notebooks)"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "llama-stack-client>=0.6.0",
+    "llama-stack-client~=0.7.0",
     "openai>=2.24.0",
     "mcp>=1.0.0",
     "pytest>=9.0.2",
@@ -16,6 +16,12 @@ dependencies = [
 
 [tool.pytest.ini_options]
 addopts = "--cov=llamastack_functional_tests --cov-report=term-missing"
+
+[tool.ruff]
+extend-exclude = ["bruno/"]
+
+[tool.ruff.lint.per-file-ignores]
+"notebooks/*.ipynb" = ["E402"]
 
 [tool.coverage.run]
 branch = true
