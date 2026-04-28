@@ -31,21 +31,20 @@ The full matrix is defined in **`config/providers-matrix.yaml`** (derived from [
 3. **Run the full test run** (Bruno files + all Bruno collections + notebooks):
 
    ```bash
-   ./local/scripts/run-tests-with-providers.sh
+   ./scripts/run-tests-with-providers.sh
    ```
 
    Or build and run the **container** (same env vars): see `Containerfile` and README.
 
 4. **What runs**
 
-   - **Phase 1 – Bruno files**
-     Isolated endpoints for the Files API (upload, list, get, delete, etc.). Coverage is independent of inference/vector_io.
+   - **Phase 1 – Bruno CRUD tests** (`bruno/lls-crud/`)
+     Hand-written tests with assertions and variable chaining: admin, models, inference, files, responses. Produces `reports/bruno-crud.xml` (JUnit XML).
 
-   - **Phase 2 – Bruno full**
-     All Bruno collections (chat completions, embeddings, agents, OpenResponses, etc.). These use `BASE_URL` and `MODEL`; inference provider is determined by how LLS is configured.
+   - **Phase 2 – Notebooks** (`notebooks/`)
+     Full-flow integration (responses API, streaming, MCP, RAG, negative cases). Run via pytest. Produces `reports/notebooks.xml` (JUnit XML).
 
-   - **Phase 3 – Notebooks**
-     Full-flow integration (responses API, MCP, agents, RAG). **Same parameters as Bruno:** the script exports env vars; notebooks read them via `config/notebook_env.py` (`os.environ.get`). See `notebooks/README.md`.
+   The script auto-syncs `llama-stack-client` to match the server version before running.
 
 ## Same parameters in notebooks (ipynb)
 
@@ -62,7 +61,7 @@ export MODEL="gpt-4o"
 export FILES_PROVIDER="remote::s3"
 export INFERENCE_PROVIDER="remote::azure"
 export VECTOR_IO_PROVIDER="remote::pgvector"
-./local/scripts/run-tests-with-providers.sh
+./scripts/run-tests-with-providers.sh
 ```
 
 ## CI / matrix runs
