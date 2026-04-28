@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [tool.pytest.ini_options]
-addopts = "-v"
+addopts = "-v --junitxml=reports/notebooks.xml"
 
 [tool.ruff]
 extend-exclude = ["bruno/"]
