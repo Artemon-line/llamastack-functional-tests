@@ -10,16 +10,16 @@ Notebooks use the **same parameters** as Bruno: `base_url`, `model`, and optiona
 | **test_rag.ipynb** | RAG: create vector store, upload doc, `responses.create` with `file_search`; assert answer. |
 | **test_openapi.ipynb** | OpenAPI: OpenAI client pointed at LLS; `responses.create`; assert response. |
 
-## Scenario notebooks (QE-focused)
+## Additional test notebooks
 
 | Notebook | Purpose |
 |----------|---------|
-| **Scenario_01_Basic_Inference.ipynb** | Temperature (0.0 deterministic vs 1.0) and top_p; assert identical output for temp=0, non-empty for temp=1.0 and top_p. |
-| **Scenario_02_Streaming_Responses.ipynb** | Streaming: iterate chunks, capture full message; assert chunk count and content (e.g. Paris). |
-| **Scenario_03_MCP_Tool_Integration.ipynb** | MCP tool-calling with `mcp::` prefix; agent calls tool and synthesizes result. Requires MCP server registered (e.g. `mcp::hash`). |
-| **Scenario_04_Negative_Testing.ipynb** | Invalid sampling (temp > 2.0) and non-existent MCP tool; assert API returns error or non-completed status. |
+| **test_basic_inference.ipynb** | Temperature (0.0 deterministic vs 1.0); assert identical output for temp=0, non-empty for temp=1.0. |
+| **test_streaming_responses.ipynb** | Streaming: iterate chunks, capture full message; assert chunk count and content (e.g. Paris). |
+| **test_mcp_tooling.ipynb** | MCP tool-calling; agent calls tool and synthesizes result. Skips gracefully if MCP not available. |
+| **test_negative.ipynb** | Invalid sampling (temp > 2.0) and non-existent MCP tool; assert API returns error. |
 
-All use env: `LLAMA_STACK_BASE_URL` or `BASE_URL`, `MODEL_ID` or `MODEL`. Scenario_03 uses optional `MCP_TOOL_GROUP` (default `mcp::hash`).
+All use env: `BASE_URL` (default `http://localhost:8321`), `MODEL` (required, no default). `test_mcp_tooling` uses optional `MCP_TOOL_GROUP`.
 
 Notebooks that assert on response content use the shared **`response_text`** helper from **`scripts/helpers.py`** to extract text from Responses API objects (with an inline fallback if the script is not on `PYTHONPATH`). This keeps the QE pattern consistent: **QE Perspective** in the first markdown, **Setup** section with config and helper import, then implementation and assertions. No Langchain; minimal and readable. The original **responses-api.ipynb** is kept as a full demo and is **skipped** when running pytest (see `SKIP_NOTEBOOKS` in `tests/test_notebooks.py`).
 
