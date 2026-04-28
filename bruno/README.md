@@ -9,14 +9,14 @@
 
 To generate a Bruno collection from the LLS OpenAPI spec:
 
-**Option A — use a local spec (e.g. from a running server):**  
+**Option A — use a local spec (e.g. from a running server):**
 Place the spec at `bruno/openapi.json`, then run:
 
 ```bash
 ./bruno/scripts/generate-from-openapi.sh
 ```
 
-**Option B — fetch from running LLS:**  
+**Option B — fetch from running LLS:**
 With the server up at `BASE_URL`:
 
 ```bash
