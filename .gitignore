@@ -4,3 +4,10 @@ __pycache__/
 .coverage
 *.egg-info/
 node_modules
+bruno/notebooks/
+.env
+.venv/
+dist/
+build/
+.claude/settings.local.json
+reports/
