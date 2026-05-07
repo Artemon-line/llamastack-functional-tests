@@ -1,28 +1,28 @@
-# AGENTS.md — AI Agent Instructions for LlamaStack Functional Tests
+# AGENTS.md — AI Agent Instructions for OGX Functional Tests
 
 This file provides instructions for any AI coding agent (Claude Code, Cursor, Copilot, etc.) working on this repo.
 
 ## Project Purpose
 
-Functional tests for **LlamaStack (LLS)** using [Bruno](https://www.usebruno.com/) API collections. The server is assumed **running** — tests validate endpoints, not deployment.
+Functional tests for **OGX** using [Bruno](https://www.usebruno.com/) API collections. The server is assumed **running** — tests validate endpoints, not deployment.
 
 ## Repository Layout
 
-> **Note:** The layout below reflects the **current branch**. Each LLS version is tracked on its own branch (e.g., `0.6.0.1+rhai0`, `0.2.22.2+rhai0`). Collections, endpoints, and folder structure may differ between branches — always check what exists on the branch you are working on. Do NOT assume folders or files from another branch are present.
+> **Note:** The layout below reflects the **current branch**. Each OGX version is tracked on its own branch (e.g., `0.6.0.1+rhai0`, `0.2.22.2+rhai0`). Collections, endpoints, and folder structure may differ between branches — always check what exists on the branch you are working on. Do NOT assume folders or files from another branch are present.
 
 ```text
 bruno/
-  lls-api/            ← AUTO-GENERATED from OpenAPI (do NOT edit by hand)
-    <ApiGroup>/        ← subfolder per API group (varies by LLS version)
+  ogx-api/            ← AUTO-GENERATED from OpenAPI (do NOT edit by hand)
+    <ApiGroup>/        ← subfolder per API group (varies by OGX version)
     collection.bru     ← collection config (baseUrl variable defined here)
     bruno.json
-  lls-crud/            ← HAND-WRITTEN CRUD tests with assertions (create this)
+  ogx-crud/            ← HAND-WRITTEN CRUD tests with assertions (create this)
     NN-group/          ← numbered folders, contents vary by branch
     collection.bru
   environments/
-    lls.bru            ← shared env vars: baseUrl, model, provider labels
+    ogx.bru            ← shared env vars: baseUrl, model, provider labels
   scripts/
-    generate-from-openapi.sh  ← regenerate lls-api from running server
+    generate-from-openapi.sh  ← regenerate ogx-api from running server
   package.json         ← npm scripts: bruno:generate, bruno:run
 scripts/
   run-tests-with-providers.sh ← main test runner (Bruno + notebooks)
@@ -30,21 +30,21 @@ scripts/
 
 ### Branching Strategy
 
-- **One branch per LLS version** (e.g., `0.6.0.1+rhai0` for LLS 0.6.x, `0.2.22.2+rhai0` for LLS 0.2.x)
-- The OpenAPI spec and available endpoints change between LLS versions — always regenerate `lls-api/` from the target server
-- CRUD tests in `lls-crud/` are version-specific; cherry-pick shared infrastructure (scripts, package.json, .gitignore) across branches as needed
-- Before writing tests, run `./bruno/scripts/generate-from-openapi.sh` against the target server and inspect `lls-api/` to see what endpoints exist on this version
+- **One branch per OGX version** (e.g., `0.6.0.1+rhai0` for OGX 0.6.x, `0.2.22.2+rhai0` for OGX 0.2.x)
+- The OpenAPI spec and available endpoints change between OGX versions — always regenerate `ogx-api/` from the target server
+- CRUD tests in `ogx-crud/` are version-specific; cherry-pick shared infrastructure (scripts, package.json, .gitignore) across branches as needed
+- Before writing tests, run `./bruno/scripts/generate-from-openapi.sh` against the target server and inspect `ogx-api/` to see what endpoints exist on this version
 
 ## Two-Layer Test Strategy
 
-### Layer 1: `lls-api/` — Auto-generated (baseline)
+### Layer 1: `ogx-api/` — Auto-generated (baseline)
 
 - Generated from OpenAPI spec via `./bruno/scripts/generate-from-openapi.sh`
 - Covers all endpoints with placeholder request bodies
 - **Never edit these files** — they get overwritten on regeneration
 - Purpose: smoke test that all endpoints are reachable
 
-### Layer 2: `lls-crud/` — Hand-written (your task)
+### Layer 2: `ogx-crud/` — Hand-written (your task)
 
 - CRUD tests with **real request bodies**, **assertions**, and **variable chaining**
 - Organized in numbered folders for execution order (Bruno runs alphabetically)
@@ -152,7 +152,7 @@ script:post-response {
 
 ## CRUD Groups to Implement
 
-Analyze `lls-api/` subfolders and the server's `/v1/providers` response to determine which groups are available. Typical groups:
+Analyze `ogx-api/` subfolders and the server's `/v1/providers` response to determine which groups are available. Typical groups:
 
 | Priority | Group | Endpoints | Notes |
 |----------|-------|-----------|-------|
@@ -171,7 +171,7 @@ Analyze `lls-api/` subfolders and the server's `/v1/providers` response to deter
 cd bruno && npm run bruno:run -- --env-var baseUrl=http://localhost:8321 --env-var model=vllm-inference/llama-3-2-3b
 
 # Run CRUD tests only
-cd bruno/lls-crud && npx --prefix .. bru run . -r --env-var baseUrl=http://localhost:8321 --env-var model=vllm-inference/llama-3-2-3b
+cd bruno/ogx-crud && npx --prefix .. bru run . -r --env-var baseUrl=http://localhost:8321 --env-var model=vllm-inference/llama-3-2-3b
 
 # Full provider-matrix run
 BASE_URL=http://localhost:8321 MODEL=vllm-inference/llama-3-2-3b ./scripts/run-tests-with-providers.sh
@@ -180,11 +180,11 @@ BASE_URL=http://localhost:8321 MODEL=vllm-inference/llama-3-2-3b ./scripts/run-t
 ## Important Rules
 
 - **Never hardcode model names or provider-specific values.** Models and embedding models must come from variables (`{{model}}`, `{{embedding_model}}` in Bruno; `MODEL` env var in notebooks). Defaults for `baseUrl` are OK (`http://localhost:8321`), but model names are environment-specific and must always be passed in. Same applies to embedding model names, provider IDs, and API keys.
-- **Never edit files in `lls-api/`** — they are auto-generated
+- **Never edit files in `ogx-api/`** — they are auto-generated
 - **Always read the generated `.bru` file** for an endpoint before writing its CRUD test — it shows the correct URL, method, and request body schema
 - **Use `baseUrl`** (camelCase), not `base_url` — this matches the OpenAPI-generated collection
 - **Test against a running server** before committing — run `bru run . -r` from the collection dir
-- **Branch per LLS version** — e.g., `0.6.0.1+rhai0` for LLS 0.6.x, `0.2.22.2+rhai0` for LLS 0.2.x
+- **Branch per OGX version** — e.g., `0.6.0.1+rhai0` for OGX 0.6.x, `0.2.22.2+rhai0` for OGX 0.2.x
 
 ## Notebook Conventions
 

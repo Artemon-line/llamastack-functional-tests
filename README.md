@@ -1,6 +1,6 @@
-# LlamaStack Functional Tests
+# OGX Functional Tests
 
-Functional tests for LlamaStack (Bruno + notebooks). LLS is assumed **running**; you provide **BASE_URL** and **model name**.
+Functional tests for OGX (Bruno + notebooks). The server is assumed **running**; you provide **BASE_URL** and **model name**.
 
 ## Quick start (local)
 
@@ -10,15 +10,15 @@ Functional tests for LlamaStack (Bruno + notebooks). LLS is assumed **running**;
 # Install Bruno CLI (one-time)
 cd bruno && npm install && cd ..
 
-# Generate lls-api collection from OpenAPI spec
+# Generate ogx-api collection from OpenAPI spec
 ./bruno/scripts/generate-from-openapi.sh
 ```
 
 ### 2. Run all Bruno tests
 
 ```bash
-npx --prefix bruno bru run bruno/lls-api \
-  --env-file bruno/environments/lls.bru \
+npx --prefix bruno bru run bruno/ogx-api \
+  --env-file bruno/environments/ogx.bru \
   --env-var base_url=http://localhost:8321 \
   --env-var model=vllm-inference/llama-3-2-3b
 ```
@@ -41,24 +41,24 @@ export VECTOR_IO_PROVIDER="remote::pgvector"
 Build the image and run with the **same env vars**:
 
 ```bash
-podman build -t llamastack-functional-tests -f Containerfile .
+podman build -t ogx-functional-tests -f Containerfile .
 podman run --rm \
-  -e BASE_URL="http://lls:8321" \
+  -e BASE_URL="http://ogx:8321" \
   -e MODEL="vllm-inference/llama-3-2-3b" \
   -e FILES_PROVIDER="remote::s3" \
   -e INFERENCE_PROVIDER="remote::azure" \
   -e VECTOR_IO_PROVIDER="remote::pgvector" \
-  llamastack-functional-tests
+  ogx-functional-tests
 ```
 
 **Required:** `BASE_URL`, `MODEL`. **Optional:** `FILES_PROVIDER`, `INFERENCE_PROVIDER`, `VECTOR_IO_PROVIDER`.
 
-- **Full plan and layout:** [LLS_FUNCTIONAL_TESTS_PLAN.md](LLS_FUNCTIONAL_TESTS_PLAN.md)
-- **Provider matrix:** [docs/providers-matrix.md](docs/providers-matrix.md) and [config/providers-matrix.yaml](config/providers-matrix.yaml) (aligned with [llama-stack-distribution/distribution](https://github.com/opendatahub-io/llama-stack-distribution/tree/main/distribution))
+- **Full plan and layout:** [OGX_FUNCTIONAL_TESTS_PLAN.md](OGX_FUNCTIONAL_TESTS_PLAN.md)
+- **Provider matrix:** [docs/providers-matrix.md](docs/providers-matrix.md) and [config/providers-matrix.yaml](config/providers-matrix.yaml) (aligned with [ogx-distribution/distribution](https://github.com/opendatahub-io/ogx-distribution/tree/main/distribution))
 
 ## Test run phases
 
-1. **Bruno lls-api** — generated from OpenAPI, covers all LLS endpoints (`bruno/lls-api`)
+1. **Bruno ogx-api** — generated from OpenAPI, covers all OGX endpoints (`bruno/ogx-api`)
 2. **Bruno full** — all collections under `bruno/`
 3. **Notebooks** — run as **pytest** tests (each notebook in `notebooks/` executed to completion; see [notebooks/README.md](notebooks/README.md) and [Jupyter Notebooks as Test Cases](https://blog.iqmo.com/blog/python/jupyter_notebook_testing/))
 

@@ -1,4 +1,4 @@
-llama-stack-client>=0.6.0
+ogx-client>=0.6.0
 openai>=2.24.0
 mcp>=1.0.0
 pytest>=9.0.2

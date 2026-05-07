@@ -1,6 +1,6 @@
 {
   "version": "1",
-  "name": "LLS API",
+  "name": "OGX CRUD",
   "type": "collection",
   "ignore": [
     "node_modules",

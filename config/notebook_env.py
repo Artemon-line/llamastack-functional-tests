@@ -7,7 +7,7 @@ read from environment variables via os.environ.get.
 import os
 
 base_url = os.environ.get("BASE_URL") or os.environ.get(
-    "LLAMA_STACK_BASE_URL", "http://localhost:8321"
+    "OGX_BASE_URL", "http://localhost:8321"
 )
 model = os.environ.get("MODEL") or os.environ.get("MODEL_ID", "")
 api_key = os.environ.get("API_KEY", "")

@@ -42,10 +42,10 @@ _ensure_server() {
     return 0
   fi
   echo "  Server unreachable at ${BASE_URL} — attempting port-forward restart..."
-  pkill -f "port-forward.*lls-vllm-test" 2>/dev/null || true
+  pkill -f "port-forward.*ogx-vllm-test" 2>/dev/null || true
   sleep 1
-  local ns="${OC_NAMESPACE:-lls-vllm-test}"
-  local svc="${OC_SERVICE:-svc/llama-stack-vllm-vertex-service}"
+  local ns="${OC_NAMESPACE:-ogx-vllm-test}"
+  local svc="${OC_SERVICE:-svc/ogx-vllm-vertex-service}"
   local port="${BASE_URL##*:}"  # extract port from http://host:PORT
   oc port-forward -n "${ns}" "${svc}" "${port}:${port}" >/dev/null 2>&1 &
   sleep 4
@@ -86,13 +86,13 @@ _env_vars=(
 )
 
 # ── Phase 1: Bruno CRUD tests ───────────────────────────────────────────────
-LLS_CRUD_DIR="${BRUNO_DIR}/lls-crud"
-if [[ -n "${BRU}" && -d "${LLS_CRUD_DIR}" ]]; then
+OGX_CRUD_DIR="${BRUNO_DIR}/ogx-crud"
+if [[ -n "${BRU}" && -d "${OGX_CRUD_DIR}" ]]; then
   _ensure_server
   echo ">>> Phase 1: Bruno CRUD tests"
   _bruno_json=$(mktemp /tmp/bruno-results-XXXXXX.json)
   # Run Bruno; filter out proxy warnings and the misleading built-in summary
-  if (cd "${LLS_CRUD_DIR}" && $BRU run . -r "${_env_vars[@]}" --output "${_bruno_json}") \
+  if (cd "${OGX_CRUD_DIR}" && $BRU run . -r "${_env_vars[@]}" --output "${_bruno_json}") \
        2>&1 | grep -v -e "proxy" -e "Proxy" -e "getSystem" -e "at async" -e "at .*/node_modules/" -e "^$" \
               | sed '/📊 Execution Summary/,/└.*┘/d'; then
     :

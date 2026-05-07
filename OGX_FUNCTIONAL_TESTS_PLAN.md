@@ -1,16 +1,16 @@
-# LlamaStack Functional Testing Repository
+# OGX Functional Testing Repository
 
-Functional tests for **LlamaStack (LLS)** using Bruno API collections and Jupyter notebooks. The server is assumed **running** — tests validate endpoints, not deployment.
+Functional tests for **OGX** using Bruno API collections and Jupyter notebooks. The server is assumed **running** — tests validate endpoints, not deployment.
 
 **Assumption:** User (or CI) provides `BASE_URL` and `MODEL` to test against. No environment-specific config in the repo.
 
 ## Repository Layout
 
 ```text
-llamastack-functional-tests/
+ogx-functional-tests/
 ├── bruno/
-│   ├── lls-api/              ← Auto-generated from OpenAPI (do NOT edit)
-│   ├── lls-crud/             ← Hand-written CRUD tests with assertions
+│   ├── ogx-api/              ← Auto-generated from OpenAPI (do NOT edit)
+│   ├── ogx-crud/             ← Hand-written CRUD tests with assertions
 │   │   ├── 01-admin/         ← version, health, providers, routes
 │   │   ├── 02-models/        ← list, get
 │   │   ├── 03-inference/     ← chat completions
@@ -55,7 +55,7 @@ llamastack-functional-tests/
 
 ## Branching Strategy
 
-- **One branch per LLS version** (e.g. `0.7.1+rhaiv.1`, `0.6.0.1+rhai0`, `0.2.22.2+rhai0`)
+- **One branch per OGX version** (e.g. `0.7.1+rhaiv.1`, `0.6.0.1+rhai0`, `0.2.22.2+rhai0`)
 - `main` tracks the latest server version
 - CI infrastructure (scripts, pre-commit, JUnit XML) is shared across all branches
 - API-specific test content (`.bru` files, notebooks) varies per branch
@@ -74,7 +74,7 @@ llamastack-functional-tests/
 
 `scripts/run-tests-with-providers.sh` runs both phases:
 
-**Phase 1 — Bruno CRUD tests** (`bruno/lls-crud/`)
+**Phase 1 — Bruno CRUD tests** (`bruno/ogx-crud/`)
 
 - Hand-written tests with assertions and variable chaining
 - Output parsed by `bruno-summary.py` for accurate assertion counts
@@ -110,7 +110,7 @@ JUnit XML reports at `reports/bruno-crud.xml` and `reports/notebooks.xml` are co
 
 The runner also:
 
-- Auto-syncs `llama-stack-client` to match server version (no HTTP 426 mismatches)
+- Auto-syncs `ogx-client` to match server version (no HTTP 426 mismatches)
 - Recovers port-forwarding if the connection drops mid-run
 - Filters Bruno CLI noise (proxy warnings, misleading 0/0 summary)
 

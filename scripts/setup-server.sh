@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Start PostgreSQL + LlamaStack containers, auto-discover the model, run tests.
+# Start PostgreSQL + OGX containers, auto-discover the model, run tests.
 #
 # Usage:
 #   ./scripts/setup-server.sh              # Full: start infra, run tests, cleanup
@@ -9,58 +9,58 @@
 #   ./scripts/setup-server.sh --cleanup    # Stop and remove containers
 #
 # Options:
-#   --start-only     Start PostgreSQL + LlamaStack, then exit
-#   --tests-only     Run tests against existing LLS (uses BASE_URL or localhost:8321)
+#   --start-only     Start PostgreSQL + OGX, then exit
+#   --tests-only     Run tests against existing OGX server (uses BASE_URL or localhost:8321)
 #   --cleanup        Remove containers and exit
 #   --no-cleanup     In full mode, keep containers after tests
 #   --help           Show this help
 #
 # Infrastructure env vars (with defaults):
-#   LLAMA_STACK_IMAGE   Container image (default: quay.io/rhoai/odh-llama-stack-core-rhel9:rhoai-3.4-linux-x86-64)
-#   LLAMA_STACK_PORT    Host port for LLS (default: 8321)
+#   OGX_IMAGE   Container image (default: quay.io/rhoai/odh-llama-stack-core-rhel9:rhoai-3.4-linux-x86-64)
+#   OGX_PORT    Host port for OGX (default: 8321)
 #   POSTGRES_IMAGE      Postgres image (default: postgres:17-alpine)
-#   POSTGRES_USER       Postgres user (default: llamastack)
-#   POSTGRES_PASSWORD   Postgres password (default: llamastack)
+#   POSTGRES_USER       Postgres user (default: ogx)
+#   POSTGRES_PASSWORD   Postgres password (default: ogx)
 #   POSTGRES_DB         Postgres database (default: postgres)
 #   POSTGRES_PORT       Host port for Postgres (default: 5432)
 #   CLEANUP_DB          Clean DB on startup: true/false (default: false)
 #   MODEL               Inference model (default: auto-discovered from server)
 #
-# Provider env vars (forwarded to LLS container if set):
+# Provider env vars (forwarded to OGX container if set):
 #   VLLM_URL, VLLM_API_TOKEN, VLLM_TLS_VERIFY
 #   VLLM_EMBEDDING_URL, VLLM_EMBEDDING_API_TOKEN, VLLM_EMBEDDING_TLS_VERIFY
 #   INFERENCE_MODEL, EMBEDDING_MODEL, EMBEDDING_PROVIDER, EMBEDDING_PROVIDER_MODEL_ID
 #   GOOGLE_CLOUD_PROJECT, VERTEX_AI_PROJECT, VERTEX_AI_LOCATION, GOOGLE_APPLICATION_CREDENTIALS
 #   AWS_BEARER_TOKEN_BEDROCK, AWS_DEFAULT_REGION
-#   ENABLE_KUBEFLOW_GARAK, ENABLE_SENTENCE_TRANSFORMERS, LLAMA_STACK_LOGGING
+#   ENABLE_KUBEFLOW_GARAK, ENABLE_SENTENCE_TRANSFORMERS, OGX_LOGGING
 #
 
 set -euo pipefail
 
 # ── Configuration ─────────────────────────────────────────────────────────────
 
-LLAMA_STACK_IMAGE="${LLAMA_STACK_IMAGE:-quay.io/rhoai/odh-llama-stack-core-rhel9:rhoai-3.4-linux-x86-64}"
-LLAMA_STACK_PORT="${LLAMA_STACK_PORT:-8321}"
+OGX_IMAGE="${OGX_IMAGE:-quay.io/rhoai/odh-llama-stack-core-rhel9:rhoai-3.4-linux-x86-64}"
+OGX_PORT="${OGX_PORT:-8321}"
 POSTGRES_IMAGE="${POSTGRES_IMAGE:-postgres:17-alpine}"
-POSTGRES_USER="${POSTGRES_USER:-llamastack}"
-POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-llamastack}"
+POSTGRES_USER="${POSTGRES_USER:-ogx}"
+POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-ogx}"
 POSTGRES_DB="${POSTGRES_DB:-postgres}"
 POSTGRES_PORT="${POSTGRES_PORT:-5432}"
 CLEANUP_DB="${CLEANUP_DB:-false}"
 
 CONTAINER_NAME_PG="postgres-local"
-CONTAINER_NAME_LLS="llama-stack-local"
-NETWORK_NAME="llama-stack-network"
+CONTAINER_NAME_OGX="ogx-local"
+NETWORK_NAME="ogx-network"
 VOLUME_NAME="postgres-data"
 
-# Provider env vars forwarded to the LLS container (if set in calling env)
+# Provider env vars forwarded to the OGX container (if set in calling env)
 FORWARD_VARS=(
     INFERENCE_MODEL EMBEDDING_MODEL EMBEDDING_PROVIDER EMBEDDING_PROVIDER_MODEL_ID
     VLLM_TLS_VERIFY VLLM_EMBEDDING_TLS_VERIFY
     GOOGLE_CLOUD_PROJECT VERTEX_AI_PROJECT VERTEX_AI_LOCATION GOOGLE_APPLICATION_CREDENTIALS
     AWS_BEARER_TOKEN_BEDROCK AWS_DEFAULT_REGION
     ENABLE_KUBEFLOW_GARAK ENABLE_SENTENCE_TRANSFORMERS
-    LLAMA_STACK_LOGGING
+    OGX_LOGGING
 )
 
 # Sensitive vars to mask in printed commands
@@ -179,26 +179,26 @@ start_postgres() {
     done
 }
 
-start_llama_stack() {
+start_ogx() {
     # Verify postgres is running
     if ! podman ps --format "{{.Names}}" | grep -q "^${CONTAINER_NAME_PG}$"; then
         echo -e "${RED}PostgreSQL container '${CONTAINER_NAME_PG}' is not running.${NC}" >&2
         exit 1
     fi
 
-    echo -e "${GREEN}Starting LlamaStack...${NC}"
-    echo "Image: ${LLAMA_STACK_IMAGE}"
+    echo -e "${GREEN}Starting OGX...${NC}"
+    echo "Image: ${OGX_IMAGE}"
 
     # Force-remove existing
-    podman rm -f "${CONTAINER_NAME_LLS}" 2>/dev/null || true
+    podman rm -f "${CONTAINER_NAME_OGX}" 2>/dev/null || true
 
     ensure_network
 
     # Build podman run arguments
     local RUN_ARGS=(
-        --name "${CONTAINER_NAME_LLS}"
+        --name "${CONTAINER_NAME_OGX}"
         --network "${NETWORK_NAME}"
-        -p "${LLAMA_STACK_PORT}:8321"
+        -p "${OGX_PORT}:8321"
         -e "POSTGRES_HOST=${CONTAINER_NAME_PG}"
         -e "POSTGRES_PORT=5432"
         -e "POSTGRES_DB=${POSTGRES_DB}"
@@ -245,19 +245,19 @@ start_llama_stack() {
         fi
         echo -e "  ${BLUE}${arg}${NC}"
     done
-    echo -e "  ${BLUE}${LLAMA_STACK_IMAGE}${NC}"
+    echo -e "  ${BLUE}${OGX_IMAGE}${NC}"
 
-    podman run -d "${RUN_ARGS[@]}" "${LLAMA_STACK_IMAGE}"
+    podman run -d "${RUN_ARGS[@]}" "${OGX_IMAGE}"
 
     sleep 3
     wait_for_health
 }
 
 wait_for_health() {
-    local health_url="http://localhost:${LLAMA_STACK_PORT}/v1/health"
+    local health_url="http://localhost:${OGX_PORT}/v1/health"
     local max_attempts=60
 
-    echo -e "${BLUE}Waiting for LlamaStack health check...${NC}"
+    echo -e "${BLUE}Waiting for OGX health check...${NC}"
 
     for i in $(seq 1 $max_attempts); do
         local response http_code body
@@ -267,7 +267,7 @@ wait_for_health() {
 
         if [[ "$http_code" == "200" ]]; then
             if echo "$body" | grep -q '"status".*"OK"'; then
-                echo -e "${GREEN}LlamaStack is healthy!${NC}"
+                echo -e "${GREEN}OGX is healthy!${NC}"
                 return 0
             fi
         fi
@@ -279,8 +279,8 @@ wait_for_health() {
     done
 
     echo -e "${RED}Health check failed after ${max_attempts} attempts.${NC}" >&2
-    echo "Check logs: podman logs ${CONTAINER_NAME_LLS}" >&2
-    podman logs "${CONTAINER_NAME_LLS}" 2>&1 | tail -30
+    echo "Check logs: podman logs ${CONTAINER_NAME_OGX}" >&2
+    podman logs "${CONTAINER_NAME_OGX}" 2>&1 | tail -30
     exit 1
 }
 
@@ -290,7 +290,7 @@ discover_model() {
         return 0
     fi
 
-    local models_url="http://localhost:${LLAMA_STACK_PORT}/v1/models"
+    local models_url="http://localhost:${OGX_PORT}/v1/models"
     echo "Discovering inference model from ${models_url}..."
 
     local response
@@ -321,7 +321,7 @@ print('')
 }
 
 run_tests() {
-    export BASE_URL="http://localhost:${LLAMA_STACK_PORT}"
+    export BASE_URL="http://localhost:${OGX_PORT}"
     export MODEL
 
     echo -e "${GREEN}Running functional tests...${NC}"
@@ -335,7 +335,7 @@ run_tests() {
 
 cleanup() {
     echo -e "${YELLOW}Cleaning up containers...${NC}"
-    for c in "${CONTAINER_NAME_LLS}" "${CONTAINER_NAME_PG}"; do
+    for c in "${CONTAINER_NAME_OGX}" "${CONTAINER_NAME_PG}"; do
         podman rm -f "$c" 2>/dev/null || true
     done
     echo -e "${GREEN}Containers removed.${NC}"
@@ -348,18 +348,18 @@ print_status() {
     echo "================================"
     echo -e "${GREEN}Infrastructure is running.${NC}"
     echo "================================"
-    echo "  LLS server:  http://localhost:${LLAMA_STACK_PORT}"
+    echo "  OGX server:  http://localhost:${OGX_PORT}"
     echo "  PostgreSQL:  localhost:${POSTGRES_PORT}"
     echo "  MODEL:       ${MODEL}"
-    echo "  Image:       ${LLAMA_STACK_IMAGE}"
+    echo "  Image:       ${OGX_IMAGE}"
     echo ""
     echo "Run tests:"
     echo "  ./scripts/setup-server.sh --tests-only"
     echo "  # or manually:"
-    echo "  BASE_URL=http://localhost:${LLAMA_STACK_PORT} MODEL=${MODEL} ./scripts/run-tests-with-providers.sh"
+    echo "  BASE_URL=http://localhost:${OGX_PORT} MODEL=${MODEL} ./scripts/run-tests-with-providers.sh"
     echo ""
     echo "Logs:"
-    echo "  podman logs -f ${CONTAINER_NAME_LLS}"
+    echo "  podman logs -f ${CONTAINER_NAME_OGX}"
     echo ""
     echo "Cleanup:"
     echo "  ./scripts/setup-server.sh --cleanup"
@@ -375,21 +375,21 @@ case "$MODE" in
         ;;
 
     tests-only)
-        export BASE_URL="${BASE_URL:-http://localhost:${LLAMA_STACK_PORT}}"
+        export BASE_URL="${BASE_URL:-http://localhost:${OGX_PORT}}"
         # Verify server is reachable
         if ! curl -fsS "${BASE_URL}/v1/health" >/dev/null 2>&1; then
-            echo -e "${RED}No LLS server at ${BASE_URL}${NC}" >&2
+            echo -e "${RED}No OGX server at ${BASE_URL}${NC}" >&2
             echo "Start one first, or run without --tests-only for full setup." >&2
             exit 1
         fi
-        echo -e "${GREEN}Found running LLS at ${BASE_URL}${NC}"
+        echo -e "${GREEN}Found running OGX at ${BASE_URL}${NC}"
         discover_model
         run_tests
         ;;
 
     start-only)
         start_postgres
-        start_llama_stack
+        start_ogx
         discover_model
         print_status
         ;;
@@ -399,7 +399,7 @@ case "$MODE" in
             trap cleanup EXIT
         fi
         start_postgres
-        start_llama_stack
+        start_ogx
         discover_model
         run_tests
         echo -e "${GREEN}All tests passed!${NC}"

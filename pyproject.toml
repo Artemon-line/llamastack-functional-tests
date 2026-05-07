@@ -1,11 +1,11 @@
 [project]
-name = "llamastack-functional-tests"
+name = "ogx-functional-tests"
 version = "0.1.0"
-description = "Functional tests for LlamaStack (Bruno + notebooks)"
+description = "Functional tests for OGX (Bruno + notebooks)"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "llama-stack-client~=0.7.0",
+    "ogx-client~=0.7.0",
     "openai>=2.24.0",
     "mcp>=1.0.0",
     "pytest>=9.0.2",
@@ -27,7 +27,7 @@ extend-exclude = ["bruno/"]
 
 [tool.coverage.run]
 branch = true
-source = ["llamastack_functional_tests"]
+source = ["ogx_functional_tests"]
 
 [tool.coverage.report]
 show_missing = true

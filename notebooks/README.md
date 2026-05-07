@@ -8,7 +8,7 @@ Notebooks use the **same parameters** as Bruno: `base_url`, `model`, and optiona
 |----------|---------|
 | **test_responses.ipynb** | Responses API: non-streaming + streaming; `responses.create`, iterate stream, assert status and content (e.g. Paris). |
 | **test_rag.ipynb** | RAG: create vector store, upload doc, `responses.create` with `file_search`; assert answer. |
-| **test_openapi.ipynb** | OpenAPI: OpenAI client pointed at LLS; `responses.create`; assert response. |
+| **test_openapi.ipynb** | OpenAPI: OpenAI client pointed at OGX; `responses.create`; assert response. |
 
 ## Additional test notebooks
 

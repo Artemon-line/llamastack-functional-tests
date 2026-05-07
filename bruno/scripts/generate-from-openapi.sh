@@ -1,6 +1,6 @@
 
 #!/usr/bin/env bash
-# Fetch OpenAPI spec from running LLS (e.g. 0.2.22.2+rhai0) and generate Bruno collection.
+# Fetch OpenAPI spec from running OGX server and generate Bruno collection.
 # Usage: BASE_URL=http://localhost:8321 ./bruno/scripts/generate-from-openapi.sh
 # Requires: curl, bru (Bruno CLI). Optional: BASE_URL (default: http://localhost:8321).
 
@@ -10,12 +10,12 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BRUNO_DIR="$(cd "${SCRIPT_DIR}/.." && pwd)"
 REPO_ROOT="$(cd "${BRUNO_DIR}/.." && pwd)"
 SPEC_URL="${BASE_URL:-http://localhost:8321}/openapi.json"
-OUTPUT_COLLECTION="${BRUNO_DIR}/lls-api"
+OUTPUT_COLLECTION="${BRUNO_DIR}/ogx-api"
 SPEC_FILE_LOCAL="${BRUNO_DIR}/openapi.json"
 SPEC_FILE_FETCHED="${BRUNO_DIR}/spec/openapi.json"
-COLLECTION_NAME="LLS API"
+COLLECTION_NAME="OGX API"
 
-echo "=== Generate Bruno collection from LLS OpenAPI ==="
+echo "=== Generate Bruno collection from OGX OpenAPI ==="
 echo "OUTPUT_COLLECTION=${OUTPUT_COLLECTION}"
 echo ""
 
@@ -29,7 +29,7 @@ else
   if curl -sf --connect-timeout 5 "${SPEC_URL}" -o "${SPEC_FILE}"; then
     echo "Fetched OpenAPI spec to ${SPEC_FILE}"
   else
-    echo "Error: No local spec at ${SPEC_FILE_LOCAL} and could not fetch from ${SPEC_URL}. Save openapi.json to bruno/openapi.json or ensure LLS is running." >&2
+    echo "Error: No local spec at ${SPEC_FILE_LOCAL} and could not fetch from ${SPEC_URL}. Save openapi.json to bruno/openapi.json or ensure OGX server is running." >&2
     exit 1
   fi
 fi
@@ -55,5 +55,5 @@ $BRU import openapi \
   || { echo "Error: bru import failed" >&2; exit 1; }
 
 echo "Collection written to ${OUTPUT_COLLECTION}"
-echo "Run with: bru run ${OUTPUT_COLLECTION} --env-file ${BRUNO_DIR}/environments/lls.bru --env-var base_url=${BASE_URL:-http://localhost:8321} --env-var model=\${MODEL}"
+echo "Run with: bru run ${OUTPUT_COLLECTION} --env-file ${BRUNO_DIR}/environments/ogx.bru --env-var base_url=${BASE_URL:-http://localhost:8321} --env-var model=\${MODEL}"
 echo "=== Done ==="

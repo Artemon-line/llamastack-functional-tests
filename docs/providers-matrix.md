@@ -1,6 +1,6 @@
 # Providers matrix testing
 
-This repo supports running functional tests against **provider combinations** aligned with the [llama-stack-distribution](https://github.com/opendatahub-io/llama-stack-distribution/tree/main/distribution) config.
+This repo supports running functional tests against **provider combinations** aligned with the [ogx-distribution](https://github.com/opendatahub-io/ogx-distribution/tree/main/distribution) config.
 
 ## Provider dimensions
 
@@ -10,11 +10,11 @@ This repo supports running functional tests against **provider combinations** al
 | **inference** | `remote::vllm`, `remote::azure`, `remote::bedrock`, … | Inference/chat/embedding backend |
 | **vector_io** | `inline::milvus`, `remote::pgvector`, `remote::qdrant`, … | Vector store for RAG/agents      |
 
-The full matrix is defined in **`config/providers-matrix.yaml`** (derived from [distribution/config.yaml](https://github.com/opendatahub-io/llama-stack-distribution/blob/main/distribution/config.yaml)).
+The full matrix is defined in **`config/providers-matrix.yaml`** (derived from [distribution/config.yaml](https://github.com/opendatahub-io/ogx-distribution/blob/main/distribution/config.yaml)).
 
 ## Running tests for a provider combination
 
-1. **Deploy LLS** with the desired provider combination (files, inference, vector_io) and required env vars for each provider. This is outside this repo.
+1. **Deploy OGX** with the desired provider combination (files, inference, vector_io) and required env vars for each provider. This is outside this repo.
 
 2. **Set test run variables** (and optionally provider labels for reporting):
 
@@ -38,13 +38,13 @@ The full matrix is defined in **`config/providers-matrix.yaml`** (derived from [
 
 4. **What runs**
 
-   - **Phase 1 – Bruno CRUD tests** (`bruno/lls-crud/`)
+   - **Phase 1 – Bruno CRUD tests** (`bruno/ogx-crud/`)
      Hand-written tests with assertions and variable chaining: admin, models, inference, files, responses. Produces `reports/bruno-crud.xml` (JUnit XML).
 
    - **Phase 2 – Notebooks** (`notebooks/`)
      Full-flow integration (responses API, streaming, MCP, RAG, negative cases). Run via pytest. Produces `reports/notebooks.xml` (JUnit XML).
 
-   The script auto-syncs `llama-stack-client` to match the server version before running.
+   The script auto-syncs `ogx-client` to match the server version before running.
 
 ## Same parameters in notebooks (ipynb)
 
@@ -56,7 +56,7 @@ Bruno and notebooks share one parameter set:
 ## Example: S3 + Azure + pgvector
 
 ```bash
-export BASE_URL="https://my-lls.example.com"
+export BASE_URL="https://my-ogx.example.com"
 export MODEL="gpt-4o"
 export FILES_PROVIDER="remote::s3"
 export INFERENCE_PROVIDER="remote::azure"
@@ -72,5 +72,5 @@ To test multiple combinations, call the script in a loop (or use a matrix in Git
 
 ## Reference
 
-- Distribution config: [opendatahub-io/llama-stack-distribution/distribution](https://github.com/opendatahub-io/llama-stack-distribution/tree/main/distribution)
+- Distribution config: [opendatahub-io/ogx-distribution/distribution](https://github.com/opendatahub-io/ogx-distribution/tree/main/distribution)
 - Provider list and enablement: `distribution/README.md` and `distribution/config.yaml`

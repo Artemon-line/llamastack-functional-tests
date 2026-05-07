@@ -1,11 +1,11 @@
 ---
-name: lls-funk-tests:generate-crud
-description: Use when asked to generate CRUD Bruno tests for LlamaStack, create lls-crud collection, or add endpoint tests with assertions and variable chaining
+name: ogx-funk-tests:generate-crud
+description: Use when asked to generate CRUD Bruno tests for OGX, create ogx-crud collection, or add endpoint tests with assertions and variable chaining
 ---
 
 # Generate CRUD Bruno Tests
 
-Create `bruno/lls-crud/` collection from auto-generated `bruno/lls-api/` and a running LLS server.
+Create `bruno/ogx-crud/` collection from auto-generated `bruno/ogx-api/` and a running OGX server.
 
 ## Inputs
 
@@ -21,7 +21,7 @@ Model is auto-discovered from the server (`/v1/models`) — pick the first non-e
 ```dot
 digraph generate_crud {
   "Discover server" [shape=box];
-  "Read lls-api schemas" [shape=box];
+  "Read ogx-api schemas" [shape=box];
   "Create collection.bru" [shape=box];
   "Generate group" [shape=box];
   "Run group" [shape=diamond];
@@ -33,8 +33,8 @@ digraph generate_crud {
   "User approves?" [shape=diamond, style=bold];
   "Done" [shape=doublecircle];
 
-  "Discover server" -> "Read lls-api schemas";
-  "Read lls-api schemas" -> "Create collection.bru";
+  "Discover server" -> "Read ogx-api schemas";
+  "Read ogx-api schemas" -> "Create collection.bru";
   "Create collection.bru" -> "Generate group";
   "Generate group" -> "Run group";
   "Run group" -> "Fix failures" [label="fail"];
@@ -85,12 +85,12 @@ Map provider APIs to CRUD groups. Only generate tests for APIs the server actual
 
 ### Step 2: Read Schemas
 
-For each group, read the corresponding `bruno/lls-api/<Group>/` folder. The generated `.bru` files show exact URLs, methods, and request body fields. Use these as the source of truth — do NOT guess endpoints.
+For each group, read the corresponding `bruno/ogx-api/<Group>/` folder. The generated `.bru` files show exact URLs, methods, and request body fields. Use these as the source of truth — do NOT guess endpoints.
 
 ### Step 3: Create Collection
 
 ```
-bruno/lls-crud/
+bruno/ogx-crud/
   collection.bru        ← baseUrl variable
   NN-group/
     folder.bru          ← optional folder meta
@@ -100,7 +100,7 @@ bruno/lls-crud/
 `collection.bru`:
 ```bru
 meta {
-  name: LLS CRUD
+  name: OGX CRUD
 }
 
 auth {
@@ -137,12 +137,12 @@ vars:pre-request {
 **For each group, immediately after generating its files:**
 
 ```bash
-cd bruno/lls-crud && npx --prefix .. bru run NN-group -r \
+cd bruno/ogx-crud && npx --prefix .. bru run NN-group -r \
   --env-var baseUrl=${BASE_URL} --env-var model=<discovered-model>
 ```
 
 **GATE: Do NOT move to the next group until the current one passes.** Fix failures first:
-- Wrong request body shape → re-read `lls-api/` schema
+- Wrong request body shape → re-read `ogx-api/` schema
 - 405 Method Not Allowed → endpoint doesn't support that method, remove or adjust
 - Socket hang up → server can't handle the request, skip or adjust
 
@@ -151,7 +151,7 @@ cd bruno/lls-crud && npx --prefix .. bru run NN-group -r \
 After ALL groups pass individually, run the entire collection:
 
 ```bash
-cd bruno/lls-crud && npx --prefix .. bru run . -r \
+cd bruno/ogx-crud && npx --prefix .. bru run . -r \
   --env-var baseUrl=${BASE_URL} --env-var model=<discovered-model>
 ```
 

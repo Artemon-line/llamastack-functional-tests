@@ -27,4 +27,4 @@ repos:
     hooks:
       - id: markdownlint
         args: [--fix]
-        exclude: ^(\.claude/|LLS_FUNCTIONAL_TESTS_PLAN\.md)
+        exclude: ^(\.claude/|OGX_FUNCTIONAL_TESTS_PLAN\.md)

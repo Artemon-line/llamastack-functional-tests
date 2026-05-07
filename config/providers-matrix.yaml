@@ -1,5 +1,5 @@
-# Provider options per API, aligned with llama-stack-distribution
-# https://github.com/opendatahub-io/llama-stack-distribution/tree/main/distribution
+# Provider options per API, aligned with ogx-distribution
+# https://github.com/opendatahub-io/ogx-distribution/tree/main/distribution
 #
 # Use with run-tests-with-providers.sh: set FILES_PROVIDER, INFERENCE_PROVIDER,
 # VECTOR_IO_PROVIDER (and MODEL for inference) to run tests against a given combo.
@@ -10,12 +10,12 @@ files:
     description: Default local files (meta-reference-files)
   - id: remote::s3
     provider_type: remote::s3
-    description: S3-backed files (set ENABLE_S3, S3_* env on LLS)
+    description: S3-backed files (set ENABLE_S3, S3_* env on OGX)
 
 inference:
   - id: remote::vllm
     provider_type: remote::vllm
-    description: vLLM (set VLLM_URL on LLS)
+    description: vLLM (set VLLM_URL on OGX)
   - id: remote::bedrock
     provider_type: remote::bedrock
     description: AWS Bedrock (set AWS_BEARER_TOKEN_BEDROCK, AWS_DEFAULT_REGION)

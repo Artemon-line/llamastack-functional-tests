@@ -1,11 +1,11 @@
 """
 Shared helpers for notebook and script tests.
-Used by notebooks to extract response text from Llama Stack Responses API objects.
+Used by notebooks to extract response text from OGX Responses API objects.
 """
 
 
 def response_text(r):
-    """Extract full text from a Responses API response object (Llama Stack or OpenAI-compatible)."""
+    """Extract full text from a Responses API response object (OGX or OpenAI-compatible)."""
     t = getattr(r, "output_text", None)
     if t:
         return t
