@@ -41,7 +41,7 @@ set -euo pipefail
 
 OGX_IMAGE="${OGX_IMAGE:-quay.io/rhoai/odh-llama-stack-core-rhel9:rhoai-3.4-linux-x86-64}"
 OGX_PORT="${OGX_PORT:-8321}"
-POSTGRES_IMAGE="${POSTGRES_IMAGE:-postgres:17-alpine}"
+POSTGRES_IMAGE="${POSTGRES_IMAGE:-docker.io/pgvector/pgvector:pg17}"
 POSTGRES_USER="${POSTGRES_USER:-ogx}"
 POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-ogx}"
 POSTGRES_DB="${POSTGRES_DB:-postgres}"
@@ -57,14 +57,16 @@ VOLUME_NAME="postgres-data"
 FORWARD_VARS=(
     INFERENCE_MODEL EMBEDDING_MODEL EMBEDDING_PROVIDER EMBEDDING_PROVIDER_MODEL_ID
     VLLM_TLS_VERIFY VLLM_EMBEDDING_TLS_VERIFY
-    GOOGLE_CLOUD_PROJECT VERTEX_AI_PROJECT VERTEX_AI_LOCATION GOOGLE_APPLICATION_CREDENTIALS
+    GOOGLE_CLOUD_PROJECT VERTEX_AI_PROJECT VERTEX_AI_LOCATION
     AWS_BEARER_TOKEN_BEDROCK AWS_DEFAULT_REGION
+    OPENAI_API_KEY
+    ENABLE_PGVECTOR PGVECTOR_HOST PGVECTOR_PORT PGVECTOR_DB PGVECTOR_USER PGVECTOR_PASSWORD
     ENABLE_KUBEFLOW_GARAK ENABLE_SENTENCE_TRANSFORMERS
     OGX_LOGGING
 )
 
 # Sensitive vars to mask in printed commands
-SENSITIVE_KEYS_REGEX='^(POSTGRES_PASSWORD|AWS_BEARER_TOKEN_BEDROCK|VLLM_API_TOKEN|VLLM_EMBEDDING_API_TOKEN)$'
+SENSITIVE_KEYS_REGEX='^(POSTGRES_PASSWORD|PGVECTOR_PASSWORD|AWS_BEARER_TOKEN_BEDROCK|VLLM_API_TOKEN|VLLM_EMBEDDING_API_TOKEN|OPENAI_API_KEY)$'
 
 # ── Colors ────────────────────────────────────────────────────────────────────
 
@@ -224,6 +226,25 @@ start_ogx() {
     fi
     if [[ -n "${VLLM_EMBEDDING_API_TOKEN:-}" ]]; then
         RUN_ARGS+=(-e "VLLM_EMBEDDING_API_TOKEN=${VLLM_EMBEDDING_API_TOKEN}")
+    fi
+
+    # Default pgvector connection to the same Postgres instance if enabled
+    if [[ -n "${ENABLE_PGVECTOR:-}" ]]; then
+        PGVECTOR_HOST="${PGVECTOR_HOST:-${CONTAINER_NAME_PG}}"
+        PGVECTOR_PORT="${PGVECTOR_PORT:-5432}"
+        PGVECTOR_DB="${PGVECTOR_DB:-${POSTGRES_DB}}"
+        PGVECTOR_USER="${PGVECTOR_USER:-${POSTGRES_USER}}"
+        PGVECTOR_PASSWORD="${PGVECTOR_PASSWORD:-${POSTGRES_PASSWORD}}"
+        export PGVECTOR_HOST PGVECTOR_PORT PGVECTOR_DB PGVECTOR_USER PGVECTOR_PASSWORD
+    fi
+
+    # Mount GCP credentials via podman secret if the file exists
+    if [[ -n "${GOOGLE_APPLICATION_CREDENTIALS:-}" ]] && [[ -f "${GOOGLE_APPLICATION_CREDENTIALS}" ]]; then
+        podman secret create --replace=true gcp-credentials "${GOOGLE_APPLICATION_CREDENTIALS}" >/dev/null 2>&1
+        RUN_ARGS+=(
+            --secret gcp-credentials
+            -e "GOOGLE_APPLICATION_CREDENTIALS=/run/secrets/gcp-credentials"
+        )
     fi
 
     # Forward remaining provider vars if set
