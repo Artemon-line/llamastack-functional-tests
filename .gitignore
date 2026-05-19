@@ -11,3 +11,4 @@ dist/
 build/
 .claude/settings.local.json
 reports/
+docs/superpowers/

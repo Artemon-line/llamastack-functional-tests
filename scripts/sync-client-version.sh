@@ -9,6 +9,11 @@
 
 set -euo pipefail
 
+if [[ "${SKIP_CLIENT_SYNC:-0}" == "1" ]]; then
+  echo "Client version sync skipped (SKIP_CLIENT_SYNC=1)"
+  return 0 2>/dev/null || exit 0
+fi
+
 : "${BASE_URL:?BASE_URL is required}"
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
