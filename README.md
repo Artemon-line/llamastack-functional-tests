@@ -34,8 +34,6 @@ Reports land in `reports/` as JUnit XML (Bruno: `bruno-crud.xml`, notebooks: `no
 
 All variables are auto-discovered by `setup-server.sh` from the running OGX instance. For manual runs, copy `.env.example` and set the values for your deployment.
 
-## Test Layers
-
 ## Structure
 
 ```text
@@ -129,6 +127,7 @@ Functional tests reuse the existing distro CI actions (`setup-postgres`, `setup-
 ### JUnit XML Output
 
 Both test phases produce JUnit XML in `reports/`:
+
 - `reports/bruno-crud.xml` — Bruno CRUD results
 - `reports/notebooks.xml` — Notebook pytest results
 
@@ -183,6 +182,7 @@ cp bruno/ogx-crud/06-responses/Get\ Response.bru \
 ```
 
 Key patterns:
+
 - Save IDs with `bru.setEnvVar("response_id", res.getBody().id)` in Create
 - Reference them with `{{response_id}}` in Get/Delete
 - Assertions go in `script:post-response` blocks
@@ -194,6 +194,7 @@ cp notebooks/test_responses.ipynb notebooks/test_<your_feature>.ipynb
 ```
 
 Key patterns:
+
 - Cell 1: imports + config from env vars (`os.environ.get("INFERENCE_MODEL")`)
 - Cell 2: setup (create client, check prerequisites)
 - Cell 3+: test scenarios with `assert` statements
