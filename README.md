@@ -38,7 +38,7 @@ All variables are auto-discovered by `setup-server.sh` from the running OGX inst
 
 ## Structure
 
-```
+```text
 functional/
 ├── bruno/
 │   ├── ogx-crud/               # Hand-written CRUD tests with assertions
