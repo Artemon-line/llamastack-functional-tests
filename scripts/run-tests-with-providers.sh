@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC1091
 # Run Bruno CRUD and notebook tests for a given provider combination.
-# Requires: BASE_URL, MODEL (inference model name).
+# Requires: BASE_URL, INFERENCE_MODEL (inference model name).
 # Optional: FILES_PROVIDER, INFERENCE_PROVIDER, VECTOR_IO_PROVIDER,
 #           EMBEDDING_MODEL (for reporting/env).
 #
 # Example:
 #   export BASE_URL="http://localhost:8321"
-#   export MODEL="vllm-inference/llama-3-2-3b"
+#   export INFERENCE_MODEL="vllm-inference/llama-3-2-3b"
 #   ./scripts/run-tests-with-providers.sh
 
 set -euo pipefail
@@ -24,8 +24,8 @@ if [[ -z "${BASE_URL:-}" ]]; then
   echo "Error: BASE_URL is required (e.g. http://localhost:8321)" >&2
   exit 1
 fi
-if [[ -z "${MODEL:-}" ]]; then
-  echo "Error: MODEL is required for inference tests (e.g. vllm-inference/llama-3-2-3b)" >&2
+if [[ -z "${INFERENCE_MODEL:-}" ]]; then
+  echo "Error: INFERENCE_MODEL is required for inference tests (e.g. vllm-inference/llama-3-2-3b)" >&2
   exit 1
 fi
 
@@ -93,7 +93,7 @@ _ensure_server() {
 echo ""
 echo "=== Provider matrix test run ==="
 echo "  BASE_URL           = ${BASE_URL}"
-echo "  MODEL              = ${MODEL}"
+echo "  INFERENCE_MODEL              = ${INFERENCE_MODEL}"
 echo "  EMBEDDING_MODEL    = ${EMBEDDING_MODEL}"
 echo "  INFERENCE_PROVIDER = ${INFERENCE_PROVIDER}"
 echo "  FILES_PROVIDER     = ${FILES_PROVIDER}"
@@ -106,13 +106,17 @@ if [[ -x "${BRUNO_DIR}/node_modules/.bin/bru" ]]; then
   BRU="${BRUNO_DIR}/node_modules/.bin/bru"
 elif command -v bru &>/dev/null; then
   BRU="bru"
-elif command -v npx &>/dev/null; then
-  BRU="npx --yes @usebruno/cli"
+elif command -v npm &>/dev/null && [[ -f "${BRUNO_DIR}/package.json" ]]; then
+  echo "Installing Bruno CLI via npm ci..."
+  (cd "${BRUNO_DIR}" && npm ci --ignore-scripts 2>&1) || echo "  Warning: npm ci failed"
+  if [[ -x "${BRUNO_DIR}/node_modules/.bin/bru" ]]; then
+    BRU="${BRUNO_DIR}/node_modules/.bin/bru"
+  fi
 fi
 
 _env_vars=(
   --env-var "baseUrl=${BASE_URL}"
-  --env-var "model=${MODEL}"
+  --env-var "model=${INFERENCE_MODEL}"
   --env-var "embedding_model=${EMBEDDING_MODEL}"
   --env-var "embedding_dimension=${EMBEDDING_DIMENSION:-768}"
   --env-var "inference_provider=${INFERENCE_PROVIDER}"
@@ -120,7 +124,7 @@ _env_vars=(
   --env-var "vector_io_provider=${VECTOR_IO_PROVIDER}"
 )
 
-# ── Phase 1: Bruno CRUD tests ───────────────────────────────────────────────
+# ── Phase 1: Bruno CRUD tests (fail-fast) ───────────────────────────────────
 OGX_CRUD_DIR="${BRUNO_DIR}/ogx-crud"
 if [[ -n "${BRU}" && -d "${OGX_CRUD_DIR}" ]]; then
   _ensure_server
@@ -128,8 +132,13 @@ if [[ -n "${BRU}" && -d "${OGX_CRUD_DIR}" ]]; then
   _bruno_json=$(mktemp /tmp/bruno-results-XXXXXX.json)
   _bruno_log=$(mktemp /tmp/bruno-log-XXXXXX.txt)
   _bruno_exit=0
-  (cd "${OGX_CRUD_DIR}" && $BRU run . -r "${_env_vars[@]}" --output "${_bruno_json}") \
+  BRUNO_TIMEOUT="${BRUNO_TIMEOUT:-600}"
+  # shellcheck disable=SC2086
+  (cd "${OGX_CRUD_DIR}" && timeout "${BRUNO_TIMEOUT}" $BRU run . -r "${_env_vars[@]}" --output "${_bruno_json}") \
     > "${_bruno_log}" 2>&1 || _bruno_exit=$?
+  if [[ $_bruno_exit -eq 124 ]]; then
+    echo "  Bruno CRUD tests timed out after ${BRUNO_TIMEOUT}s"
+  fi
   # Display filtered output (strip proxy warnings and misleading built-in summary)
   grep -v -e "proxy" -e "Proxy" -e "getSystem" -e "at async" -e "at .*/node_modules/" -e "^$" < "${_bruno_log}" \
     | sed '/📊 Execution Summary/,/└.*┘/d' || true
@@ -147,6 +156,10 @@ if [[ -n "${BRU}" && -d "${OGX_CRUD_DIR}" ]]; then
     EXIT_CODE=1
   fi
   rm -f "${_bruno_json}"
+  if [[ $EXIT_CODE -ne 0 ]]; then
+    echo "  CRUD tests failed — skipping notebooks (fail-fast)"
+    exit "$EXIT_CODE"
+  fi
   echo ""
 else
   echo ">>> Phase 1: skipped (Bruno CLI not found)"
@@ -160,7 +173,7 @@ if [[ -d "$NOTEBOOKS_DIR" ]]; then
     exit 1
   fi
   echo ">>> Phase 2: Notebooks — pytest"
-  export BASE_URL MODEL FILES_PROVIDER INFERENCE_PROVIDER VECTOR_IO_PROVIDER EMBEDDING_MODEL
+  export BASE_URL INFERENCE_MODEL FILES_PROVIDER INFERENCE_PROVIDER VECTOR_IO_PROVIDER EMBEDDING_MODEL
   export PYTHONPATH="${REPO_ROOT}:${PYTHONPATH:-}"
   if ! (cd "$REPO_ROOT" && uv run pytest tests/test_notebooks.py -v --tb=short --junitxml="${REPORTS_DIR}/notebooks.xml"); then
     EXIT_CODE=1
