@@ -106,7 +106,7 @@ done
 
 ## CI Integration
 
-JUnit XML reports at `reports/bruno-crud.xml` and `reports/notebooks.xml` are consumed by any CI system (GitHub Actions, GitLab CI, Konflux/Tekton, Jenkins, ReportPortal).
+JUnit XML reports at `reports/bruno-crud.xml` and `reports/notebooks.xml` are consumed by any CI system (GitHub Actions, GitLab CI, Jenkins, ReportPortal).
 
 The runner also:
 
